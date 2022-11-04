@@ -13,22 +13,31 @@ enemies=["Orc Warrior","Your mother"]
 
 #-----------------------------------------------------------------------------------------------
 #DICE ROLLS - Commands for rolling die.
-def rolld20(x):
-    return random.sample(d20,x)
 
+
+def rolld20(x):
+    templist=(random.sample(d20,x))
+    return templist[0]
+    
+    
 def rolld8(x):
-    return random.sample(d8,x)
+    templist=(random.sample(d8,x))
+    return templist[0]
 
 def rolld4(x):
-    return random.sample(d4,x)
+    templist=(random.sample(d4,x))
+    return templist[0]
 
 #-----------------------------------------------------------------------------------------------
 #ALLY STATS - The stats of every available party member.
+
 warrior=[32,5,2,5,2] #HP, MP, AP, WP, INIT
 priest=[20,25,0,2,6]
 rogue=[27,10,1,4,3]
 
+
 #ENEMY STATS - The stats of every enemy encounterable.
+
 orcw=[15,0,2,2,2] #HP, MP, AP, WP, INIT
 yomama=[25,0,4,7,1]
 
@@ -36,8 +45,8 @@ yomama=[25,0,4,7,1]
 #BATTLE VALUES - These values determine the flow of the battles, such as turn order and stuff!
 
 def init(x):     #INITIATION - Calls a fighter's init value.
-    return x[4]
+    return int(x[4])
 
-turnOrder= int(rolld20(1))+ int(init(warrior)) #TURN ORDER - Defines who goes first during battle.
+turnOrder= rolld20(1) + init(warrior) #TURN ORDER - Defines who goes first each turn during battle.
 
 print(str(turnOrder))
