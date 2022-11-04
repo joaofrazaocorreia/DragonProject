@@ -14,7 +14,6 @@ enemies=["Orc Warrior","Your mother"]
 #-----------------------------------------------------------------------------------------------
 #DICE ROLLS - Commands for rolling die.
 
-
 def rolld20(x):
     templist=(random.sample(d20,x))
     return templist[0]
@@ -44,9 +43,30 @@ yomama=[25,0,4,7,1]
 #-----------------------------------------------------------------------------------------------
 #BATTLE VALUES - These values determine the flow of the battles, such as turn order and stuff!
 
-def init(x):     #INITIATION - Calls a fighter's init value.
+def init(x):        #INITIATION - Calls a fighter's init value.
     return int(x[4])
 
-turnOrder= rolld20(1) + init(warrior) #TURN ORDER - Defines who goes first each turn during battle.
+def turnOrder(x):             #TURN ORDER - Defines who goes first each turn during battle.
+    return rolld20(1) + init(x) 
+#-----------------------------------------------------------------------------------------------
+#BATTLE PHASES - Functions for the battle phases
 
-print(str(turnOrder))
+def initphase(allies,enemies):
+    for i in allies:
+        if i == "Warrior":
+            x=warrior
+        elif i == "Rogue":
+            x=rogue
+        elif i == "Priest":
+            x=priest
+        print(str(i)+" rolled "+str(turnOrder(x)))
+    for i in enemies:
+        if i == "Orc Warrior":
+            x=orcw
+        elif i == "Your Mother":
+            x=yomama
+        print(str(i)+" rolled "+str(turnOrder(x)))
+
+    
+initphase(party,enemies)
+
