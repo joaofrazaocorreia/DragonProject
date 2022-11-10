@@ -217,65 +217,49 @@ defeat=False
 victory=False   #Variables to check the game state
 
 while game:
+    print("")
+    print("Turn Start!")
+    print("")
 
-    if defeat:
+    initphase(allies,wave1)
+
+    while len(allies)>0:
+        if warriorInit==order[-1]:
+            print("It's Warrior's turn.")
+            order.remove(order[-1])
+            attackphase(1)
+        
+        elif priestInit==order[-1]:
+            print("It's Priest's turn.")
+            order.remove(order[-1])
+            attackphase(2)
+        
+        elif rogueInit==order[-1]:
+            print("It's Rogue's turn.")
+            order.remove(order[-1])
+            attackphase(3)
+
+        elif orcwarriorAInit==order[-1]:
+            print("It's Orc Warrior A's turn.")
+            order.remove(order[-1])
+                
+            
+        elif orcwarriorBInit==order[-1]:
+            print("It's Orc Warrior B's turn.")
+            order.remove(order[-1])
+
+        elif orcarcherInit==order[-1]:
+            print("It's Orc Archer's turn.")
+            order.remove(order[-1])
+
+    if len(allies)==0:                            #DEFEAT CHECK - If the "allies" list is empty, the game ends.
         game=False
         print("You have no more allies than can fight.")
         print("You lost the battle!")
         break
-    
-    elif victory:
+ 
+    if len(wave1)==0:                              #VICTORY CHECK - If the "wave1" list is empty, the game ends.
         game=False
         print("All enemies have been defeated.")
         print("You won the battle!")
-        break
-
-    else:
-        print("")
-        print("Turn Start!")
-        print("")
-
-        initphase(allies,wave1)
-
-        while len(allies)>0:
-            if warriorInit==order[-1]:
-                print("It's Warrior's turn.")
-                order.remove(order[-1])
-                attackphase(1)
-        
-            elif priestInit==order[-1]:
-                print("It's Priest's turn.")
-                order.remove(order[-1])
-                attackphase(2)
-        
-            elif rogueInit==order[-1]:
-                print("It's Rogue's turn.")
-                order.remove(order[-1])
-                attackphase(3)
-
-            elif orcwarriorAInit==order[-1]:
-                print("It's Orc Warrior A's turn.")
-                order.remove(order[-1])
-                
-            
-            elif orcwarriorBInit==order[-1]:
-                print("It's Orc Warrior B's turn.")
-                order.remove(order[-1])
-
-            elif orcarcherInit==order[-1]:
-                print("It's Orc Archer's turn.")
-                order.remove(order[-1])
-
-        if len(allies)==0:                            #DEFEAT CHECK - If the "allies" list is empty, it will not reset the defeat variable, and the game ends.
-            defeat=True
- 
-        if len(wave1)==0:                           #VICTORY CHECK - If the "wave1" list is empty, it will not reset the victory variable, and the game ends.
-            victory=True                            #Defeat checks before victory, so you can't win with an empty party.
-
-
-    #game=False #for testing purposes, remove later
-
-                                                     
-
-
-
+        break                           #Defeat checks before victory, so you can't win with an empty party.
