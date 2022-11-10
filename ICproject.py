@@ -5,6 +5,7 @@ import random
 
 d20=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
 d8=[1,2,3,4,5,6,7,8]
+d6=[1,2,3,4,5,6]
 d4=[1,2,3,4]
 
 allies=["Warrior","Priest","Rogue"]
@@ -21,6 +22,10 @@ def rolld20(x):
     
 def rolld8(x):
     templist=(random.sample(d8,x))
+    return templist[0]
+
+def rolld6(x):
+    templist=(random.sample(d6,x))
     return templist[0]
 
 def rolld4(x):
@@ -51,18 +56,51 @@ def turnOrder(x):             #TURN ORDER - Defines who goes first each turn dur
     return rolld20(1) + init(x)
 
 def chooseEnemy():
-        global target
-        print("")
-        print("Target an enemy!")
-        print(str(wave1))
-        target=input()
-        target=target.lower()
+    global target
+    print("")
+    print("Target an enemy!")
+    print(str(wave1))
+    target=input()
+    target=target.lower()
+
+def chooseAlly():
+    global target
+    print("")
+    print("Target an ally!")
+    print(str(allies))
+    target=input()
+    target=target.lower()
+
+def chooseSpell(charID):
+    global spell
+    print("")
+    print("Choose a spell.")
+    if charID == 1:
+        print("RUSHDOWN")
+    elif charID == 2:
+        print("MEND / EXORCISM")
+    elif charID == 3:
+        print("SHARPEN")
+
+    spell=input()
+    spell=spell.lower()
+
 
 def calculateDamage(WP,AP):
     damage= WP-AP
     if damage<0:
         damage=0
     return damage
+
+def calculateValues(spell, WP):
+    if spell=="rushdown":
+        spellEffectValue= -1 * (WP+rolld4(1))
+    elif spell=="mend":
+        spellEffectValue= WP + rolld6(1)
+    elif spell=="exorcism":
+        spellEffectValue= -2 * rolld4(1)
+    return spellEffectValue
+
 
 #-----------------------------------------------------------------------------------------------
 #BATTLE PHASES - Functions for the battle phases
@@ -138,12 +176,6 @@ def initphase(allies,wave):
     print(str(order))
 
 def attackphase(characterID):        #Command for the attack phase
-    print("")
-    print("What will you do?")
-    print("ATTACK / MAGIC")
-    command=input()
-    command=command.lower()
-    print("")
 
     if characterID==1:
         WP=warrior[3]
@@ -152,11 +184,19 @@ def attackphase(characterID):        #Command for the attack phase
     elif characterID==3:
         WP=rogue[3]
 
+    print("")
+    print("What will you do?")
+    print("ATTACK / MAGIC")
+    command=input()
+    command=command.lower()
+    print("")
+
+
+    turn=True
 
     if command=="attack":
 
-        attack=True
-        while attack:
+        while turn:
 
             chooseEnemy()                      #player inputs an enemy and their stats will be used for combat
             print("")
@@ -172,7 +212,7 @@ def attackphase(characterID):        #Command for the attack phase
                     fainted.append("Orc Warrior A")
                     print("Orc Warrior A fainted!")
                     print("")
-                attack=False
+                turn=False
 
             elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
                 AP=orcw2[2]
@@ -185,7 +225,7 @@ def attackphase(characterID):        #Command for the attack phase
                     fainted.append("Orc Warrior B")
                     print("Orc Warrior B fainted!")
                     print("")
-                attack=False
+                turn=False
 
             elif target=="orc archer" and "Orc Archer" not in fainted:
                 AP=orca[2]
@@ -198,11 +238,23 @@ def attackphase(characterID):        #Command for the attack phase
                     fainted.append("Orc Archer")
                     print("Orc Archer fainted!")
                     print("")
-                attack=False
+                turn=False
 
             else:
                 print("That's not an enemy.")           #doesn't turn "attack" into false so it loops back.            
                 print("")
+    
+    elif command=="magic":
+        
+        while turn:
+            chooseSpell(characterID)
+            if spell == "rushdown" and characterID==1:
+                effectValue=calculateValues("rushdown",warrior[3])
+
+            if spell == "mend" and characterID==2:
+                effectValue=calculateValues("mend",priest[3])
+
+
         
         
 
