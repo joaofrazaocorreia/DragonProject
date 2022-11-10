@@ -134,11 +134,11 @@ print(str(order))
 #-----------------------------------------------------------------------------------------------
 #GAME LOOP - Keeps the game going
 
-game=False #>>>>>>TURN ON TRUE WHEN TESTING<<<<<<<<<<<<<
+game=True
 defeat=False 
 victory=False   #Variables to check the game state
 
-while not game:
+while game:
 
     if defeat:
         game=False
@@ -159,17 +159,34 @@ while not game:
 
         initphase(allies,wave1)
 
-        if not defeat:                            #DEFEAT CHECK - If the "allies" list is empty, it will not reset the defeat variable, and the game ends.
-            defeat=True
-            for i in allies:
-                defeat=False
-                print("There's still allies.")
+        while len(order)>0:
+            if warriorInit==order[-1]:
+                print("It's Warrior's turn.")
         
-        if not victory:                           #VICTORY CHECK - If the "wave1" list is empty, it will not reset the victory variable, and the game ends.
-            victory=True
-            for i in wave1:
-                victory=False
-                print("There's still enemies.")   #Defeat checks before victory, so you can't win with an empty party.
+            elif priestInit==order[-1]:
+                print("It's Priest's turn.")
+        
+            elif rogueInit==order[-1]:
+                print("It's Rogue's turn.")
+
+            elif orcwarriorAInit==order[-1]:
+                print("It's Orc Warrior A's turn.")
+            
+            elif orcwarriorBInit==order[-1]:
+                print("It's Orc Warrior B's turn.")
+
+            elif orcarcherInit==order[-1]:
+                print("It's Orc Archer's turn.")
+
+        if len(allies)==0:                            #DEFEAT CHECK - If the "allies" list is empty, it will not reset the defeat variable, and the game ends.
+            defeat=True
+ 
+        if len(wave1)==0:                           #VICTORY CHECK - If the "wave1" list is empty, it will not reset the victory variable, and the game ends.
+            victory=True                            #Defeat checks before victory, so you can't win with an empty party.
+
+    game=False #for testing purposes, remove later
+
+                                                     
 
 
 
