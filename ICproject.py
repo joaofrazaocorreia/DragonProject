@@ -105,7 +105,7 @@ def initphase(allies,wave):
     order.append(orcwarrior2Init)     #Adds all init values to the order list
     order.append(orcarcherInit)
 
-    order.sort()            #Sorts the list from smallest to biggest values
+    order.sort()            #Sorts the list from smallest to biggest valuess
 
 
 
