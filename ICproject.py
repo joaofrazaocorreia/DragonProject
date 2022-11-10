@@ -123,12 +123,9 @@ def initphase(allies,wave):
     order.append(priestInit)
 
     order.sort()            #Sorts the list from smallest to biggest values
+    print(str(order))
 
 
-
-
-initphase(allies,wave1)
-print(str(order))
 
 
 #-----------------------------------------------------------------------------------------------
@@ -162,21 +159,27 @@ while game:
         while len(order)>0:
             if warriorInit==order[-1]:
                 print("It's Warrior's turn.")
+                order.remove(order[-1])
         
             elif priestInit==order[-1]:
                 print("It's Priest's turn.")
+                order.remove(order[-1])
         
             elif rogueInit==order[-1]:
                 print("It's Rogue's turn.")
+                order.remove(order[-1])
 
             elif orcwarriorAInit==order[-1]:
                 print("It's Orc Warrior A's turn.")
+                order.remove(order[-1])
             
             elif orcwarriorBInit==order[-1]:
                 print("It's Orc Warrior B's turn.")
+                order.remove(order[-1])
 
             elif orcarcherInit==order[-1]:
                 print("It's Orc Archer's turn.")
+                order.remove(order[-1])
 
         if len(allies)==0:                            #DEFEAT CHECK - If the "allies" list is empty, it will not reset the defeat variable, and the game ends.
             defeat=True
