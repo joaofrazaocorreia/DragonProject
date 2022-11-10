@@ -50,17 +50,6 @@ def init(x):        #INITIATION - Calls a fighter's init value.
 def turnOrder(x):             #TURN ORDER - Defines who goes first each turn during battle.
     return rolld20(1) + init(x)
 
-
-def checkInit(x,y):            #CHECK INIT - Checks the Init value of two characters and returns true or false accordingly
-    if x[5]>y[5]:
-        return True
-    elif x[5]<y[5]:
-        return False
-    else:
-        temp=[]
-        temp.append(random.sample[x,y])    #If two characters with the same Init roll the same value, a random one is chosen. This doesn't work right now.
-        temp[0]+=addval
-
 #-----------------------------------------------------------------------------------------------
 #BATTLE PHASES - Functions for the battle phases
 
@@ -119,7 +108,7 @@ def initphase(allies,wave):
 
     while orcwarriorBInit in order:
         orcwarriorBInit+=0.1
-    order.append(orcwarriorBInit)     #Adds all init values to the order list
+    order.append(orcwarriorBInit)     #Adds all init values to the order list, adds 0.1 if the value already exists
 
     while orcarcherInit in order:
         orcarcherInit+=0.1
