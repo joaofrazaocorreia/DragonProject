@@ -30,16 +30,16 @@ def rolld4(x):
 #-----------------------------------------------------------------------------------------------
 #ALLY STATS - The stats of every available party member.
 
-warrior=[32,5,2,5,2] #HP, MP, AP, WP, INIT
-priest=[20,25,0,2,6]
-rogue=[27,10,1,4,4]
+warrior=[32,5, 2,5,2] #HP, MP, AP, WP, INIT    ID=1
+priest= [20,25,0,2,6]                         #ID=2
+rogue = [27,10,1,4,4]                          #ID=3
 
 
 #ENEMY STATS - The stats of every enemy encounterable.
 
-orcw1=[15,0,2,2,2] #HP, MP, AP, WP, INIT
-orcw2=orcw1
-orca=[5,0,2,4,4]
+orcw1=[15,0,2,2,2] #HP, MP, AP, WP, INIT      ID=4
+orcw2=orcw1                                  #ID=5
+orca=[5,0,1,4,4]                             #ID=6
 
 #-----------------------------------------------------------------------------------------------
 #BATTLE VALUES - These values determine the flow of the battles, such as turn order and stuff
@@ -49,6 +49,20 @@ def init(x):        #INITIATION - Calls a fighter's init value.
 
 def turnOrder(x):             #TURN ORDER - Defines who goes first each turn during battle.
     return rolld20(1) + init(x)
+
+def chooseEnemy():
+        global target
+        print("")
+        print("Target an enemy!")
+        print(str(wave1))
+        target=input()
+        target=target.lower()
+
+def calculateDamage(WP,AP):
+    damage= WP-AP
+    if damage<0:
+        damage=0
+    return damage
 
 #-----------------------------------------------------------------------------------------------
 #BATTLE PHASES - Functions for the battle phases
@@ -125,8 +139,68 @@ def initphase(allies,wave):
     order.sort()            #Sorts the list from smallest to biggest values
     print(str(order))
 
+def attackphase(characterID):
+    print("")
+    print("What will you do?")
+    print("ATTACK / MAGIC")
+    command=input()
+    command=command.lower()
+
+    if characterID==1:
+        WP=warrior[3]
+    elif characterID==2:
+        WP=priest[3]
+    elif characterID==3:
+        WP=rogue[3]
 
 
+    if command=="attack":
+
+        attack=True
+        while attack:
+
+            chooseEnemy()
+
+            if target=="orc warrior a":
+                AP=orcw1[2]
+                dmg=calculateDamage(WP,AP)
+                orcw1[0]-=dmg
+                print("Orc Warrior A took "+str(dmg)+" damage!")
+                if orcw1[0]<=0:
+                    wave1.remove("Orc Warrior A")
+                    fainted.append("Orc Warrior A")
+                    print("Orc Warrior A fainted!")
+                attack=False
+
+            elif target=="orc warrior b":
+                AP=orcw2[2]
+                dmg=calculateDamage(WP,AP)
+                orcw2[0]-=dmg
+                print("Orc Warrior B took "+str(dmg)+" damage!")
+                if orcw2[0]<=0:
+                    wave1.remove("Orc Warrior B")
+                    fainted.append("Orc Warrior B")
+                    print("Orc Warrior B fainted!")
+                attack=False
+
+            elif target=="orc archer":
+                AP=orca[2]
+                dmg=calculateDamage(WP,AP)
+                orca[0]-=dmg
+                print("Orc Archer took "+str(dmg)+" damage!")
+                if orca[0]<=0:
+                    wave1.remove("Orc Archer")
+                    fainted.append("Orc Archer")
+                    print("Orc Archer fainted!")
+                attack=False
+
+            else:
+                print("That's not an enemy.")
+        
+        
+
+    
+  
 
 #-----------------------------------------------------------------------------------------------
 #GAME LOOP - Keeps the game going
@@ -160,18 +234,22 @@ while game:
             if warriorInit==order[-1]:
                 print("It's Warrior's turn.")
                 order.remove(order[-1])
+                attackphase(1)
         
             elif priestInit==order[-1]:
                 print("It's Priest's turn.")
                 order.remove(order[-1])
+                attackphase(2)
         
             elif rogueInit==order[-1]:
                 print("It's Rogue's turn.")
                 order.remove(order[-1])
+                attackphase(3)
 
             elif orcwarriorAInit==order[-1]:
                 print("It's Orc Warrior A's turn.")
                 order.remove(order[-1])
+                
             
             elif orcwarriorBInit==order[-1]:
                 print("It's Orc Warrior B's turn.")
@@ -187,6 +265,8 @@ while game:
         if len(wave1)==0:                           #VICTORY CHECK - If the "wave1" list is empty, it will not reset the victory variable, and the game ends.
             victory=True                            #Defeat checks before victory, so you can't win with an empty party.
 
+
+    print(str(orca))
     game=False #for testing purposes, remove later
 
                                                      
