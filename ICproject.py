@@ -38,7 +38,7 @@ rogue = [27,10,1,4,4]                          #ID=3
 #ENEMY STATS - The stats of every enemy encounterable.
 
 orcw1=[15,0,2,2,2] #HP, MP, AP, WP, INIT      ID=4
-orcw2=orcw1                                  #ID=5
+orcw2=[15,0,2,2,2]                           #ID=5
 orca=[5,0,1,4,4]                             #ID=6
 
 #-----------------------------------------------------------------------------------------------
@@ -69,48 +69,46 @@ def calculateDamage(WP,AP):
 
 def initphase(allies,wave):
 
-    global order
+    global order                                #Command for the init phase
     order=[]
     order.clear()
 
-    for i in allies:
-        if i == allies[0]:
-            x=warrior
-            global warriorInit
-            warriorInit=turnOrder(x)
-            print(str(i)+" rolled "+str(warriorInit))
+    if "Warrior" in allies:
+        x=warrior
+        global warriorInit
+        warriorInit=turnOrder(x)
+        print("Warrior rolled "+str(warriorInit))
 
-        elif i == allies[2]:                                 #THESE ARE PLACEHOLDERS!!!!!!!!!!!!!
-            x=rogue
-            global rogueInit
-            rogueInit=turnOrder(x)                          #We'll replace the allies and the enemies strings with the actual battle waves once they're added
-            print(str(i)+" rolled "+str(rogueInit))
+    if "Rogue" in allies:                                 
+        x=rogue
+        global rogueInit
+        rogueInit=turnOrder(x)                          
+        print("Rogue rolled "+str(rogueInit))
 
-        elif i == allies[1]:
-            x=priest
-            global priestInit
-            priestInit=turnOrder(x)
-            print(str(i)+" rolled "+str(priestInit))
+    if "Priest" in allies:
+        x=priest
+        global priestInit
+        priestInit=turnOrder(x)
+        print("Priest rolled "+str(priestInit))
 
 
-    for i in wave:
-        if i == wave[0]:
-            x=orcw1
-            global orcwarriorAInit
-            orcwarriorAInit=turnOrder(x)
-            print(str(i)+" rolled "+str(orcwarriorAInit))
+    if "Orc Warrior A" in wave:
+        x=orcw1
+        global orcwarriorAInit
+        orcwarriorAInit=turnOrder(x)
+        print("Orc Warrior A rolled "+str(orcwarriorAInit))
             
-        if i == wave[1]:
-            x=orcw2
-            global orcwarriorBInit
-            orcwarriorBInit=turnOrder(x)
-            print(str(i)+" rolled "+str(orcwarriorBInit)) 
+    if "Orc Warrior B" in wave:
+        x=orcw2
+        global orcwarriorBInit
+        orcwarriorBInit=turnOrder(x)
+        print("Orc Warrior B rolled "+str(orcwarriorBInit)) 
 
-        elif i == wave[2]:
-            x=orca
-            global orcarcherInit
-            orcarcherInit=turnOrder(x)
-            print(str(i)+" rolled "+str(orcarcherInit))
+    if "Orc Archer" in wave:
+        x=orca
+        global orcarcherInit
+        orcarcherInit=turnOrder(x)
+        print("Orc Archer rolled "+str(orcarcherInit))
             
     
 
@@ -128,7 +126,7 @@ def initphase(allies,wave):
         orcarcherInit+=0.1
     order.append(orcarcherInit)
 
-    while rogueInit in order:        #IMPORTANT NOTE - DON'T CHANGE THE FREAKING ORDER!!!! THEY'RE BASED ON INIT VALUES
+    while rogueInit in order:        #IMPORTANT NOTE - DON'T CHANGE THIS ORDER!!!! THEY'RE BASED ON INIT VALUES, FROM HIGHEST TO LOWEST
         rogueInit+=0.1
     order.append(rogueInit)
 
@@ -139,16 +137,17 @@ def initphase(allies,wave):
     order.sort()            #Sorts the list from smallest to biggest values
     print(str(order))
 
-def attackphase(characterID):
+def attackphase(characterID):        #Command for the attack phase
     print("")
     print("What will you do?")
     print("ATTACK / MAGIC")
     command=input()
     command=command.lower()
+    print("")
 
     if characterID==1:
         WP=warrior[3]
-    elif characterID==2:
+    elif characterID==2:               #Assigns WP according to the ID given
         WP=priest[3]
     elif characterID==3:
         WP=rogue[3]
@@ -159,43 +158,51 @@ def attackphase(characterID):
         attack=True
         while attack:
 
-            chooseEnemy()
+            chooseEnemy()                      #player inputs an enemy and their stats will be used for combat
+            print("")
 
-            if target=="orc warrior a":
+            if target=="orc warrior a" and "Orc Warrior A" not in fainted:
                 AP=orcw1[2]
                 dmg=calculateDamage(WP,AP)
                 orcw1[0]-=dmg
                 print("Orc Warrior A took "+str(dmg)+" damage!")
+                print("")
                 if orcw1[0]<=0:
                     wave1.remove("Orc Warrior A")
                     fainted.append("Orc Warrior A")
                     print("Orc Warrior A fainted!")
+                    print("")
                 attack=False
 
-            elif target=="orc warrior b":
+            elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
                 AP=orcw2[2]
                 dmg=calculateDamage(WP,AP)
                 orcw2[0]-=dmg
                 print("Orc Warrior B took "+str(dmg)+" damage!")
+                print("")
                 if orcw2[0]<=0:
                     wave1.remove("Orc Warrior B")
                     fainted.append("Orc Warrior B")
                     print("Orc Warrior B fainted!")
+                    print("")
                 attack=False
 
-            elif target=="orc archer":
+            elif target=="orc archer" and "Orc Archer" not in fainted:
                 AP=orca[2]
                 dmg=calculateDamage(WP,AP)
                 orca[0]-=dmg
                 print("Orc Archer took "+str(dmg)+" damage!")
+                print("")
                 if orca[0]<=0:
                     wave1.remove("Orc Archer")
                     fainted.append("Orc Archer")
                     print("Orc Archer fainted!")
+                    print("")
                 attack=False
 
             else:
-                print("That's not an enemy.")
+                print("That's not an enemy.")           #doesn't turn "attack" into false so it loops back.            
+                print("")
         
         
 
@@ -230,7 +237,7 @@ while game:
 
         initphase(allies,wave1)
 
-        while len(order)>0:
+        while len(allies)>0:
             if warriorInit==order[-1]:
                 print("It's Warrior's turn.")
                 order.remove(order[-1])
@@ -266,8 +273,7 @@ while game:
             victory=True                            #Defeat checks before victory, so you can't win with an empty party.
 
 
-    print(str(orca))
-    game=False #for testing purposes, remove later
+    #game=False #for testing purposes, remove later
 
                                                      
 
