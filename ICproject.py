@@ -39,7 +39,7 @@ rogue=[27,10,1,4,4]
 
 orcw1=[15,0,2,2,2] #HP, MP, AP, WP, INIT
 orcw2=orcw1
-orca=[5,0,2,3,4]
+orca=[5,0,2,4,4]
 
 #-----------------------------------------------------------------------------------------------
 #BATTLE VALUES - These values determine the flow of the battles, such as turn order and stuff
@@ -48,7 +48,19 @@ def init(x):        #INITIATION - Calls a fighter's init value.
     return int(x[4])
 
 def turnOrder(x):             #TURN ORDER - Defines who goes first each turn during battle.
-    return rolld20(1) + init(x) 
+    return rolld20(1) + init(x)
+
+
+def checkInit(x,y):            #CHECK INIT - Checks the Init value of two characters and returns true or false accordingly
+    if x[5]>y[5]:
+        return True
+    elif x[5]<y[5]:
+        return False
+    else:
+        temp=[]
+        temp.append(random.sample[x,y])    #If two characters with the same Init roll the same value, a random one is chosen. This doesn't work right now.
+        temp[0]+=addval
+
 #-----------------------------------------------------------------------------------------------
 #BATTLE PHASES - Functions for the battle phases
 
@@ -81,31 +93,47 @@ def initphase(allies,wave):
     for i in wave:
         if i == wave[0]:
             x=orcw1
-            global orcwarrior1Init
-            orcwarrior1Init=turnOrder(x)
-            print(str(i)+" rolled "+str(orcwarrior1Init))
-
+            global orcwarriorAInit
+            orcwarriorAInit=turnOrder(x)
+            print(str(i)+" rolled "+str(orcwarriorAInit))
+            
         if i == wave[1]:
             x=orcw2
-            global orcwarrior2Init
-            orcwarrior2Init=turnOrder(x)
-            print(str(i)+" rolled "+str(orcwarrior2Init))
+            global orcwarriorBInit
+            orcwarriorBInit=turnOrder(x)
+            print(str(i)+" rolled "+str(orcwarriorBInit)) 
 
         elif i == wave[2]:
             x=orca
             global orcarcherInit
             orcarcherInit=turnOrder(x)
             print(str(i)+" rolled "+str(orcarcherInit))
+            
     
-    order.append(warriorInit)
-    order.append(priestInit)
-    order.append(rogueInit)
 
-    order.append(orcwarrior1Init)
-    order.append(orcwarrior2Init)     #Adds all init values to the order list
+    order.append(warriorInit)
+
+    while orcwarriorAInit in order:
+        orcwarriorAInit+=0.1
+    order.append(orcwarriorAInit)
+
+    while orcwarriorBInit in order:
+        orcwarriorBInit+=0.1
+    order.append(orcwarriorBInit)     #Adds all init values to the order list
+
+    while orcarcherInit in order:
+        orcarcherInit+=0.1
     order.append(orcarcherInit)
 
-    order.sort()            #Sorts the list from smallest to biggest valuess
+    while rogueInit in order:        #IMPORTANT NOTE - DON'T CHANGE THE FREAKING ORDER!!!! THEY'RE BASED ON INIT VALUES
+        rogueInit+=0.1
+    order.append(rogueInit)
+
+    while priestInit in order:
+        priestInit+=0.1
+    order.append(priestInit)
+
+    order.sort()            #Sorts the list from smallest to biggest values
 
 
 
@@ -113,14 +141,15 @@ def initphase(allies,wave):
 initphase(allies,wave1)
 print(str(order))
 
+
 #-----------------------------------------------------------------------------------------------
 #GAME LOOP - Keeps the game going
 
-game=True
-defeat=False #Variables to check the game state
-victory=False
+game=False #>>>>>>TURN ON TRUE WHEN TESTING<<<<<<<<<<<<<
+defeat=False 
+victory=False   #Variables to check the game state
 
-while game:
+while not game:
 
     if defeat:
         game=False
@@ -135,9 +164,11 @@ while game:
         break
 
     else:
-        #initphase(party,wave1)
+        print("")
+        print("Turn Start!")
+        print("")
 
-
+        initphase(allies,wave1)
 
         if not defeat:                            #DEFEAT CHECK - If the "allies" list is empty, it will not reset the defeat variable, and the game ends.
             defeat=True
