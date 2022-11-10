@@ -9,7 +9,7 @@ d4=[1,2,3,4]
 
 party=["Warrior","Priest","Rogue"]
 fainted=[]
-enemies=["Orc Warrior","Your mother"]
+enemies=["Orc Warrior","Orc Archer"]
 
 #-----------------------------------------------------------------------------------------------
 #DICE ROLLS - Commands for rolling die.
@@ -32,13 +32,13 @@ def rolld4(x):
 
 warrior=[32,5,2,5,2] #HP, MP, AP, WP, INIT
 priest=[20,25,0,2,6]
-rogue=[27,10,1,4,3]
+rogue=[27,10,1,4,4]
 
 
 #ENEMY STATS - The stats of every enemy encounterable.
 
 orcw=[15,0,2,2,2] #HP, MP, AP, WP, INIT
-yomama=[25,0,4,7,1]
+orca=[5,0,2,3,4]
 
 #-----------------------------------------------------------------------------------------------
 #BATTLE VALUES - These values determine the flow of the battles, such as turn order and stuff!
@@ -55,18 +55,26 @@ def initphase(allies,enemies):
     for i in allies:
         if i == "Warrior":
             x=warrior
+            warriorInit=turnOrder(x)
+            print(str(i)+" rolled "+str(turnOrder(x)))
         elif i == "Rogue":
             x=rogue
+            rogueInit=turnOrder(x)
+            print(str(i)+" rolled "+str(turnOrder(x)))
         elif i == "Priest":
             x=priest
-        print(str(i)+" rolled "+str(turnOrder(x)))
+            priestInit=turnOrder(x)
+            print(str(i)+" rolled "+str(turnOrder(x)))
+
     for i in enemies:
         if i == "Orc Warrior":
             x=orcw
-        elif i == "Your Mother":
-            x=yomama
-        print(str(i)+" rolled "+str(turnOrder(x)))
+            orcwarriorInit=turnOrder(x)
+            print(str(i)+" rolled "+str(turnOrder(x)))
+        elif i == "Orc Archer":
+            x=orca
+            orcarcherInit=turnOrder(x)
+            print(str(i)+" rolled "+str(turnOrder(x)))
 
-    
 initphase(party,enemies)
 
