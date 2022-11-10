@@ -53,28 +53,33 @@ def turnOrder(x):             #TURN ORDER - Defines who goes first each turn dur
 
 def initphase(allies,enemies):
     for i in allies:
-        if i == "Warrior":
+        if i == party[0]:
             x=warrior
+            global warriorInit
             warriorInit=turnOrder(x)
-            print(str(i)+" rolled "+str(turnOrder(x)))
-        elif i == "Rogue":
+            print(str(i)+" rolled "+str(warriorInit))
+        elif i == party[2]:                                 #THESE ARE PLACEHOLDERS!!!!!!!!!!!!!
             x=rogue
-            rogueInit=turnOrder(x)
-            print(str(i)+" rolled "+str(turnOrder(x)))
-        elif i == "Priest":
+            global rogueInit
+            rogueInit=turnOrder(x)                          #We'll replace the party and the enemies strings with the actual battle enemies once they're added
+            print(str(i)+" rolled "+str(rogueInit))
+        elif i == party[1]:
             x=priest
+            global priestInit
             priestInit=turnOrder(x)
-            print(str(i)+" rolled "+str(turnOrder(x)))
+            print(str(i)+" rolled "+str(priestInit))
 
     for i in enemies:
-        if i == "Orc Warrior":
+        if i == enemies[0]:
             x=orcw
+            global orcwarriorInit
             orcwarriorInit=turnOrder(x)
-            print(str(i)+" rolled "+str(turnOrder(x)))
-        elif i == "Orc Archer":
+            print(str(i)+" rolled "+str(orcwarriorInit))
+        elif i == enemies[1]:
             x=orca
+            global orcarcherInit
             orcarcherInit=turnOrder(x)
-            print(str(i)+" rolled "+str(turnOrder(x)))
+            print(str(i)+" rolled "+str(orcarcherInit))
 
 initphase(party,enemies)
-
+print(str(warriorInit))
