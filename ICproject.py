@@ -21,7 +21,6 @@ def rolld20():
     templist=(random.sample(d20,1))      #Rolls a d20 dice.
     return templist[0]
     
-    
 def rolld8():
     templist=(random.sample(d8,1))       #Rolls a d8 dice.
     return templist[0]
@@ -78,10 +77,13 @@ def chooseAlly():  #CHOOSE ALLY - Allows the player to choose an allied target. 
 def chooseSpell(charID):  #CHOOSE SPELL - Allows the player to choose a spell. Displays different options depending on the character ID given.
     global spell
     print("Choose a spell.")
+
     if charID == 1:
         print("RUSHDOWN")
+
     elif charID == 2:
         print("MEND / EXORCISM")
+
     elif charID == 3:
         print("SHARPEN")
 
@@ -349,11 +351,9 @@ def attackphase(characterID):
   
 
 #-----------------------------------------------------------------------------------------------
-#GAME LOOP - Keeps the game going
+#GAME LOOP - Keeps the game going until a win/lose condition is met.
 
 game=True
-defeat=False 
-victory=False   #Variables to check the game state
 
 while game:
     print("")
