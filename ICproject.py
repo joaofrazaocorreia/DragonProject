@@ -418,31 +418,39 @@ while game:
 
     while len(order)>0:  #Loops until all characters have ended their attack phase.
 
-        if warriorInit==order[-1] and "Warrior" not in fainted:  #Starts the Warrior's turn if he's alive.
-            print("It's Warrior's turn.")
+        if warriorInit==order[-1]:  #Starts the Warrior's turn if he's alive.
+            if "Warrior" not in fainted:
+                print("It's Warrior's turn.")
+                attackphase(1)
             order.remove(order[-1])
-            attackphase(1)
-        
-        elif priestInit==order[-1] and "Priest" not in fainted:  #Starts the Priests's turn if he's alive.
-            print("It's Priest's turn.")
-            order.remove(order[-1])
-            attackphase(2)
-        
-        elif rogueInit==order[-1] and "Rogue" not in fainted:  #Starts the Rogue's turn if he's alive.
-            print("It's Rogue's turn.")
-            order.remove(order[-1])
-            attackphase(3)
 
-        elif orcwarriorAInit==order[-1] and "Orc Warrior A" not in fainted:  #Starts the Orc Warrior A's turn if he's alive.
-            print("It's Orc Warrior A's turn.")
+        
+        elif priestInit==order[-1]:  #Starts the Priests's turn if he's alive.
+            if "Priest" not in fainted:
+                print("It's Priest's turn.")
+                attackphase(2)
             order.remove(order[-1])
                 
-        elif orcwarriorBInit==order[-1] and "Orc Warrior B" not in fainted:  #Starts the Orc Warrior B's turn if he's alive.
-            print("It's Orc Warrior B's turn.")
+        
+        elif rogueInit==order[-1]:  #Starts the Rogue's turn if he's alive.
+            if "Rogue" not in fainted:
+                print("It's Rogue's turn.")
+                attackphase(3)
             order.remove(order[-1])
 
-        elif orcarcherInit==order[-1] and "Orc Archer" not in fainted:   #Starts the Orc Archer's turn if he's alive.
-            print("It's Orc Archer's turn.")
+        elif orcwarriorAInit==order[-1]:  #Starts the Orc Warrior A's turn if he's alive.
+            if "Orc Warrior A" not in fainted:
+                print("It's Orc Warrior A's turn.")
+            order.remove(order[-1])
+                
+        elif orcwarriorBInit==order[-1]:  #Starts the Orc Warrior B's turn if he's alive.
+            if "Orc Warrior B" not in fainted:
+                print("It's Orc Warrior B's turn.")
+            order.remove(order[-1])
+
+        elif orcarcherInit==order[-1]:   #Starts the Orc Archer's turn if he's alive.
+            if "Orc Archer" not in fainted:
+                print("It's Orc Archer's turn.")
             order.remove(order[-1])
 
     if len(allies)==0: #DEFEAT CHECK - If the "allies" list is empty, the game ends and the player loses.
