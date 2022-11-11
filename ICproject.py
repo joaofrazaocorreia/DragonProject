@@ -280,7 +280,7 @@ def attackphase(characterID):
 
                 if MP<spellcost:
                     print("You don't have enough mana to use that spell.")
-                    attackphase(characterID) #Resets to the previous menu
+                    attackphase(characterID) #Resets to the previous menu since there's no mana
                     turn=False
                 
                 else:
@@ -291,7 +291,7 @@ def attackphase(characterID):
                     print("")
                     if target=="orc warrior a" and "Orc Warrior A" not in fainted:
 
-                        orcw1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values damage, Positive values heal.
+                        orcw1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
                         print("Orc Warrior A took "+str(-effectValue)+" damage!")
                         print("")
                         if orcw1[0]<=0:
@@ -303,7 +303,7 @@ def attackphase(characterID):
 
                     elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
 
-                        orcw2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values damage, Positive values heal.
+                        orcw2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Orc Warrior B took "+str(-effectValue)+" damage!")
                         print("")
@@ -316,7 +316,7 @@ def attackphase(characterID):
 
                     elif target=="orc archer" and "Orc Archer" not in fainted:
 
-                        orca[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values damage, Positive values heal.
+                        orca[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Orc Archer took "+str(-effectValue)+" damage!")
                         print("")
@@ -336,7 +336,7 @@ def attackphase(characterID):
 
                 if MP<spellcost:
                     print("You don't have enough mana to use that spell.")
-                    attackphase(characterID) #Resets to the previous menu
+                    attackphase(characterID) #Resets to the previous menu since there's no mana
                     turn=False
                 
                 else:
@@ -355,7 +355,7 @@ def attackphase(characterID):
 
                 if MP<spellcost:
                     print("You don't have enough mana to use that spell.")
-                    attackphase(characterID) #Resets to the previous menu
+                    attackphase(characterID) #Resets to the previous menu since there's no mana
                     turn=False
                 
                 else:
@@ -364,6 +364,43 @@ def attackphase(characterID):
                     effectValue=calculateValues("exorcism",WP)
                     chooseEnemy()
                     print("")
+                    if target=="orc warrior a" and "Orc Warrior A" not in fainted:
+
+                        orcw1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
+                        print("Orc Warrior A took "+str(-effectValue)+" damage!")
+                        print("")
+                        if orcw1[0]<=0:
+                            wave1.remove("Orc Warrior A")   #Faints if health drops below 0
+                            fainted.append("Orc Warrior A")
+                            print("Orc Warrior A fainted!")
+                            print("")
+                        turn=False
+
+                    elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
+
+                        orcw2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
+
+                        print("Orc Warrior B took "+str(-effectValue)+" damage!")
+                        print("")
+                        if orcw2[0]<=0:
+                            wave1.remove("Orc Warrior B")   #Faints if health drops below 0
+                            fainted.append("Orc Warrior B")
+                            print("Orc Warrior B fainted!")
+                            print("")
+                        turn=False
+
+                    elif target=="orc archer" and "Orc Archer" not in fainted:
+
+                        orca[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
+
+                        print("Orc Archer took "+str(-effectValue)+" damage!")
+                        print("")
+                        if orca[0]<=0:
+                            wave1.remove("Orc Archer")   #Faints if health drops below 0
+                            fainted.append("Orc Archer")
+                            print("Orc Archer fainted!")
+                            print("")
+                        turn=False
 
             elif spell == "exorcism":   #Causes error if not used by Priest.
                 print("This character can't use this spell!")
@@ -374,7 +411,7 @@ def attackphase(characterID):
 
                 if MP<spellcost:
                     print("You don't have enough mana to use that spell.")
-                    attackphase(characterID) #Resets to the previous menu
+                    attackphase(characterID) #Resets to the previous menu since there's no mana
                     turn=False
                 
                 else:
