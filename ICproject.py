@@ -3,67 +3,69 @@ import random
 #-----------------------------------------------------------------------------------------------
 #VARIABLES AND LISTS - This part stores the die and all the characters available in the game.
 
-d20=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+d20=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]     #Die values.
 d8=[1,2,3,4,5,6,7,8]
 d6=[1,2,3,4,5,6]
 d4=[1,2,3,4]
 
-allies=["Warrior","Priest","Rogue"]
-fainted=[]
-wave1=["Orc Warrior A","Orc Warrior B", "Orc Archer"]
+allies=["Warrior","Priest","Rogue"]                           #ALLIES - Allies in the party (More can be added later)
+
+fainted=[]                                                    #FAINTED - group for storing and registering characters who have been killed.
+
+wave1=["Orc Warrior A","Orc Warrior B", "Orc Archer"]         #WAVE1 - Enemies in the first wave of monsters (More can be added later)
 
 #-----------------------------------------------------------------------------------------------
 #DICE ROLLS - Commands for rolling die.
 
-def rolld20(x):
-    templist=(random.sample(d20,x))
+def rolld20():
+    templist=(random.sample(d20,1))      #Rolls a d20 dice.
     return templist[0]
     
     
-def rolld8(x):
-    templist=(random.sample(d8,x))
+def rolld8():
+    templist=(random.sample(d8,1))       #Rolls a d8 dice.
     return templist[0]
 
-def rolld6(x):
-    templist=(random.sample(d6,x))
+def rolld6():
+    templist=(random.sample(d6,1))       #Rolls a d6 dice.
     return templist[0]
 
-def rolld4(x):
-    templist=(random.sample(d4,x))
+def rolld4():
+    templist=(random.sample(d4,1))       #Rolls a d4 dice.
     return templist[0]
 
 #-----------------------------------------------------------------------------------------------
 #ALLY STATS - The stats of every available party member.
 
-warrior=[32,5, 2,5,2] #HP, MP, AP, WP, INIT    ID=1
-priest= [20,25,0,2,6]                          #ID=2
-rogue = [27,10,1,4,4]                          #ID=3
+warrior=[32,5, 2,5,2] #HP, MP, AP, WP, INIT     ID=1
+priest= [20,25,0,2,6]                         # ID=2
+rogue = [27,10,1,4,4]                         # ID=3
 
 
 #ENEMY STATS - The stats of every enemy encounterable.
 
 orcw1=[15,0,2,2,2] #HP, MP, AP, WP, INIT      ID=4
-orcw2=[15,0,2,2,2]                           #ID=5
-orca=[5,0,1,4,4]                             #ID=6
+orcw2=[15,0,2,2,2]                          # ID=5
+orca =[5, 0,1,4,4]                          # ID=6
 
 #-----------------------------------------------------------------------------------------------
 #BATTLE VALUES - These values determine the flow of the battles, such as turn order and stuff
 
-def init(x):        #INITIATION - Calls a fighter's init value.
+def init(x):                  #INIT - Calls a fighter's initiation value.
     return int(x[4])
 
-def turnOrder(x):             #TURN ORDER - Defines who goes first each turn during battle.
+def turnOrder(x):             #TURN ORDER - Defines who goes first each turn during battle. Used to calculate Init rolls.
     return rolld20(1) + init(x)
 
 def chooseEnemy():
-    global target
+    global target             #CHOOSE ENEMY - Allows the player to choose an enemy target. Changes the "target" variable to an enemy of choice.
     print("")
     print("Target an enemy!")
     print(str(wave1))
     target=input()
     target=target.lower()
 
-def chooseAlly():
+def chooseAlly():             #CHOOSE ALLY - Allows the player to choose an allied target. Changes the "target" variable to an ally of choice.
     global target
     print("")
     print("Target an ally!")
@@ -71,7 +73,7 @@ def chooseAlly():
     target=input()
     target=target.lower()
 
-def chooseSpell(charID):
+def chooseSpell(charID):      #CHOOSE SPELL - Allows the player to choose a spell. Displays different options depending on the character ID given.
     global spell
     print("Choose a spell.")
     if charID == 1:
@@ -85,15 +87,15 @@ def chooseSpell(charID):
     spell=spell.lower()
 
 
-def calculateDamage(WP,AP):
+def calculateDamage(WP,AP):     #CALCULATE DAMAGE - Subtracts the given AP from the given WP. If the result is negative, it will return 0 instead.
     damage= WP-AP
-    if damage<0:
+    if damage<0:                # (Used for ATTACK combat.)
         damage=0
     return damage
 
-def calculateValues(spell, WP):
+def calculateValues(spell, WP):                #CALCULATE VALUES - Depending on the spell given (and on the given WP), calculates the spell's damage / healing.
     if spell=="rushdown":
-        spellEffectValue= -1 * (WP+rolld4(1))
+        spellEffectValue= -1 * (WP+rolld4(1))  # (Used for MAGIC combat.)
 
     elif spell=="mend":
         spellEffectValue= WP + rolld6(1)
@@ -175,7 +177,7 @@ def initphase(allies,wave):
     order.append(priestInit)
 
     order.sort()            #Sorts the list from smallest to biggest values
-    print(str(order))
+    #print(str(order))
 
 def attackphase(characterID):        #Command for the attack phase
 
@@ -255,6 +257,38 @@ def attackphase(characterID):        #Command for the attack phase
                 effectValue=calculateValues("rushdown",WP)
                 chooseEnemy()
                 print("")
+                if target=="orc warrior a" and "Orc Warrior A" not in fainted:
+                    orcw1[0]+=effectValue
+                    print("Orc Warrior A took "+str(-effectValue)+" damage!")
+                    print("")
+                    if orcw1[0]<=0:
+                        wave1.remove("Orc Warrior A")
+                        fainted.append("Orc Warrior A")
+                        print("Orc Warrior A fainted!")
+                        print("")
+                    turn=False
+
+                elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
+                    orcw2[0]+=effectValue
+                    print("Orc Warrior B took "+str(-effectValue)+" damage!")
+                    print("")
+                    if orcw2[0]<=0:
+                        wave1.remove("Orc Warrior B")
+                        fainted.append("Orc Warrior B")
+                        print("Orc Warrior B fainted!")
+                        print("")
+                    turn=False
+
+                elif target=="orc archer" and "Orc Archer" not in fainted:
+                    orca[0]+=effectValue
+                    print("Orc Archer took "+str(-effectValue)+" damage!")
+                    print("")
+                    if orca[0]<=0:
+                        wave1.remove("Orc Archer")
+                        fainted.append("Orc Archer")
+                        print("Orc Archer fainted!")
+                        print("")
+                    turn=False
 
             elif spell == "rushdown":
                 print("This character can't use this spell!")
@@ -279,9 +313,9 @@ def attackphase(characterID):        #Command for the attack phase
 
 
             elif spell == "sharpen" and characterID==3:
-                rogue[3]+=1
-                WP+=1
-                print("Rogue sharpens his weapon. +1 Weapon Power")
+                rogue[3]+=2
+                WP+=2
+                print("Rogue sharpens his weapon. +2 Weapon Power")
                 print("")
                 turn=False
 
