@@ -158,27 +158,33 @@ def initphase(allies,wave):
             
     
 
-    order.append(warriorInit)
+    if "Warrior" not in fainted:
+        order.append(warriorInit)
 
     while orcwarriorAInit in order:
         orcwarriorAInit+=0.1
-    order.append(orcwarriorAInit)
+    if "Orc Warrior A" not in fainted:
+        order.append(orcwarriorAInit)
 
     while orcwarriorBInit in order:
         orcwarriorBInit+=0.1
-    order.append(orcwarriorBInit)  #Adds all init values to the "order" list, adds 0.1 if the value already exists.
+    if "Orc Warrior B" not in fainted:
+        order.append(orcwarriorBInit)  #Adds all alive characters' init values to the "order" list, and adds 0.1 if the value already exists.
 
-    while orcarcherInit in order:  #The fighters at the top have less priority than the fighters below them (i.e. Orc Archer has less priority than Rogue)
+    while orcarcherInit in order:      #The fighters at the top have less priority than the fighters below them (i.e. Orc Archer has less priority than Rogue)
         orcarcherInit+=0.1
-    order.append(orcarcherInit)
+    if "Orc Archer" not in fainted: 
+        order.append(orcarcherInit)
 
-    while rogueInit in order:      #IMPORTANT NOTE - DON'T CHANGE THIS ORDER!!!! THEY'RE BASED ON INIT VALUES, FROM LOWEST TO HIGHEST
+    while rogueInit in order:          #IMPORTANT NOTE - DON'T CHANGE THIS ORDER!!!! THEY'RE BASED ON INIT VALUES, FROM LOWEST TO HIGHEST
         rogueInit+=0.1
-    order.append(rogueInit)
+    if "Rogue" not in fainted:
+        order.append(rogueInit)
 
     while priestInit in order:
         priestInit+=0.1
-    order.append(priestInit)
+    if "Priest" not in fainted:
+        order.append(priestInit)
 
     order.sort()  #Sorts the list from smallest to biggest values
     print(str(order))
@@ -274,6 +280,8 @@ def attackphase(characterID):
 
                 if MP<spellcost:
                     print("You don't have enough mana to use that spell.")
+                    attackphase(characterID) #Resets to the previous menu
+                    turn=False
                 
                 else:
                     warrior[1]-=spellcost  #Removes the mana cost
@@ -328,6 +336,8 @@ def attackphase(characterID):
 
                 if MP<spellcost:
                     print("You don't have enough mana to use that spell.")
+                    attackphase(characterID) #Resets to the previous menu
+                    turn=False
                 
                 else:
                     priest[1]-=spellcost  #Removes the mana cost
@@ -345,6 +355,8 @@ def attackphase(characterID):
 
                 if MP<spellcost:
                     print("You don't have enough mana to use that spell.")
+                    attackphase(characterID) #Resets to the previous menu
+                    turn=False
                 
                 else:
                     priest[1]-=spellcost  #Removes the mana cost
@@ -362,6 +374,8 @@ def attackphase(characterID):
 
                 if MP<spellcost:
                     print("You don't have enough mana to use that spell.")
+                    attackphase(characterID) #Resets to the previous menu
+                    turn=False
                 
                 else:
                     rogue[1]-=spellcost #Removes the mana cost.
