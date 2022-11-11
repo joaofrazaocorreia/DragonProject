@@ -117,38 +117,38 @@ def initphase(allies,wave):
     order=[]
     order.clear()  #Preemptively clears the list before rerolling, just in case of an error.
 
-    if "Warrior" in allies:  #Warrior rolls for init if he's alive.
+    if "Warrior" not in fainted:  #Warrior rolls for init if he's alive.
         x=warrior
         global warriorInit
         warriorInit=turnOrder(x)
         print("Warrior rolled "+str(warriorInit))
 
-    if "Rogue" in allies:  #Rogue rolls for init if he's alive.                     
+    if "Rogue" not in fainted:  #Rogue rolls for init if he's alive.                     
         x=rogue
         global rogueInit
         rogueInit=turnOrder(x)                          
         print("Rogue rolled "+str(rogueInit))
 
-    if "Priest" in allies:  #Priest rolls for init if he's alive.
+    if "Priest" not in fainted:  #Priest rolls for init if he's alive.
         x=priest
         global priestInit
         priestInit=turnOrder(x)
         print("Priest rolled "+str(priestInit))
 
 
-    if "Orc Warrior A" in wave:  #Orc Warrior A rolls for init if he's alive.
+    if "Orc Warrior A" not in fainted:  #Orc Warrior A rolls for init if he's alive.
         x=orcw1
         global orcwarriorAInit
         orcwarriorAInit=turnOrder(x)
         print("Orc Warrior A rolled "+str(orcwarriorAInit))
             
-    if "Orc Warrior B" in wave:  #Orc Warrior B rolls for init if he's alive.
+    if "Orc Warrior B" not in fainted:  #Orc Warrior B rolls for init if he's alive.
         x=orcw2
         global orcwarriorBInit
         orcwarriorBInit=turnOrder(x)
         print("Orc Warrior B rolled "+str(orcwarriorBInit)) 
 
-    if "Orc Archer" in wave:  #Orc Archer rolls for init if he's alive.
+    if "Orc Archer" not in fainted:  #Orc Archer rolls for init if he's alive.
         x=orca
         global orcarcherInit
         orcarcherInit=turnOrder(x)
@@ -211,7 +211,7 @@ def attackphase(characterID):
             chooseEnemy()  #The player chooses an enemy and their stats will be used for melee combat.
             print("")
 
-            if target=="orc warrior a" and "Orc Warrior A" not in fainted:
+            if target=="orc warrior a" and "Orc Warrior A" not in fainted:  #Can only target orc warrior A if he's alive
                 AP=orcw1[2]
                 dmg=calculateDamage(WP,AP)
                 orcw1[0]-=dmg              #Calculates and subtracts damage from the target's hp.
@@ -224,7 +224,7 @@ def attackphase(characterID):
                     print("")
                 turn=False
 
-            elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
+            elif target=="orc warrior b" and "Orc Warrior B" not in fainted:  #Can only target orc warrior B if he's alive
                 AP=orcw2[2]
                 dmg=calculateDamage(WP,AP)
                 orcw2[0]-=dmg              #Calculates and subtracts damage from the target's hp.
@@ -237,7 +237,7 @@ def attackphase(characterID):
                     print("")
                 turn=False
 
-            elif target=="orc archer" and "Orc Archer" not in fainted:
+            elif target=="orc archer" and "Orc Archer" not in fainted:  #Can only target orc archer if he's alive
                 AP=orca[2]
                 dmg=calculateDamage(WP,AP)
                 orca[0]-=dmg              #Calculates and subtracts damage from the target's hp.
