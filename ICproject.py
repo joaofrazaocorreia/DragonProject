@@ -56,7 +56,7 @@ def init(x):   #INIT - Calls a fighter's initiation value.
     return int(x[4])
 
 def turnOrder(x):   #TURN ORDER - Defines who goes first each turn during battle. Used to calculate Init rolls.
-    return rolld20(1) + init(x)
+    return rolld20() + init(x)
 
 def chooseEnemy():  #CHOOSE ENEMY - Allows the player to choose an enemy target. Changes the "target" variable to an enemy of choice.
     global target
@@ -192,10 +192,15 @@ def attackphase(characterID):
 
     if characterID==1:
         WP=warrior[3]
-    elif characterID==2:  #Assigns a WP value according to the character ID given.
+        MP=warrior[1]
+
+    elif characterID==2:  #Assigns WP and MP values according to the ally character ID given.
         WP=priest[3]
+        MP=priest[1]
+
     elif characterID==3:
         WP=rogue[3]
+        MP=rogue[1]
 
     print("")
     print("What will you do?")
@@ -206,6 +211,7 @@ def attackphase(characterID):
 
     turn=True  #Variable for looping until the turn successfully ends.
 
+#-----------------------------------------------------------------------------------------------
     if command=="attack":  #loop for the ATTACK command.
 
         while turn:
@@ -255,83 +261,117 @@ def attackphase(characterID):
             else:
                 print("That's not an enemy.") #Causes error if the target input is unknown, and loops back to the prompt.            
                 print("")
-    
+
+
+#-----------------------------------------------------------------------------------------------
     elif command=="magic": #loop for the MAGIC command.
         
         while turn:
             chooseSpell(characterID)
             print("")
             if spell == "rushdown" and characterID==1:   #--RUSHDOWN-- spell
-                effectValue=calculateValues("rushdown",WP)
-                chooseEnemy()
-                print("")
-                if target=="orc warrior a" and "Orc Warrior A" not in fainted:
+                spellcost=5
 
-                    orcw1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values damage, Positive values heal.
+                if MP<spellcost:
+                    print("You don't have enough mana to use that spell.")
+                
+                else:
+                    warrior[1]-=spellcost  #Removes the mana cost
 
-                    print("Orc Warrior A took "+str(-effectValue)+" damage!")
+                    effectValue=calculateValues("rushdown",WP)
+                    chooseEnemy()
                     print("")
-                    if orcw1[0]<=0:
-                        wave1.remove("Orc Warrior A")   #Faints if health drops below 0
-                        fainted.append("Orc Warrior A")
-                        print("Orc Warrior A fainted!")
+                    if target=="orc warrior a" and "Orc Warrior A" not in fainted:
+
+                        orcw1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values damage, Positive values heal.
+                        print("Orc Warrior A took "+str(-effectValue)+" damage!")
                         print("")
-                    turn=False
+                        if orcw1[0]<=0:
+                            wave1.remove("Orc Warrior A")   #Faints if health drops below 0
+                            fainted.append("Orc Warrior A")
+                            print("Orc Warrior A fainted!")
+                            print("")
+                        turn=False
 
-                elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
+                    elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
 
-                    orcw2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values damage, Positive values heal.
+                        orcw2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values damage, Positive values heal.
 
-                    print("Orc Warrior B took "+str(-effectValue)+" damage!")
-                    print("")
-                    if orcw2[0]<=0:
-                        wave1.remove("Orc Warrior B")   #Faints if health drops below 0
-                        fainted.append("Orc Warrior B")
-                        print("Orc Warrior B fainted!")
+                        print("Orc Warrior B took "+str(-effectValue)+" damage!")
                         print("")
-                    turn=False
+                        if orcw2[0]<=0:
+                            wave1.remove("Orc Warrior B")   #Faints if health drops below 0
+                            fainted.append("Orc Warrior B")
+                            print("Orc Warrior B fainted!")
+                            print("")
+                        turn=False
 
-                elif target=="orc archer" and "Orc Archer" not in fainted:
+                    elif target=="orc archer" and "Orc Archer" not in fainted:
 
-                    orca[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values damage, Positive values heal.
+                        orca[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values damage, Positive values heal.
 
-                    print("Orc Archer took "+str(-effectValue)+" damage!")
-                    print("")
-                    if orca[0]<=0:
-                        wave1.remove("Orc Archer")   #Faints if health drops below 0
-                        fainted.append("Orc Archer")
-                        print("Orc Archer fainted!")
+                        print("Orc Archer took "+str(-effectValue)+" damage!")
                         print("")
-                    turn=False
+                        if orca[0]<=0:
+                            wave1.remove("Orc Archer")   #Faints if health drops below 0
+                            fainted.append("Orc Archer")
+                            print("Orc Archer fainted!")
+                            print("")
+                        turn=False
 
             elif spell == "rushdown":   #Causes error if not used by Warrior.
                 print("This character can't use this spell!")
 
 
             elif spell == "mend" and characterID==2:   #--MEND-- spell
-                effectValue=calculateValues("mend",WP)
-                chooseAlly()
-                print("")
+                spellcost=3
+
+                if MP<spellcost:
+                    print("You don't have enough mana to use that spell.")
+                
+                else:
+                    priest[1]-=spellcost  #Removes the mana cost
+                    
+                    effectValue=calculateValues("mend",WP)
+                    chooseAlly()
+                    print("")
 
             elif spell == "mend":   #Causes error if not used by Priest.
                 print("This character can't use this spell!")
 
 
             elif spell == "exorcism" and characterID==2:  #--EXORCISM-- spell
-                effectValue=calculateValues("exorcism",WP)
-                chooseEnemy()
-                print("")
+                spellcost=5
+
+                if MP<spellcost:
+                    print("You don't have enough mana to use that spell.")
+                
+                else:
+                    priest[1]-=spellcost  #Removes the mana cost
+
+                    effectValue=calculateValues("exorcism",WP)
+                    chooseEnemy()
+                    print("")
 
             elif spell == "exorcism":   #Causes error if not used by Priest.
                 print("This character can't use this spell!")
 
 
             elif spell == "sharpen" and characterID==3:  #--SHARPEN-- spell
-                rogue[3]+=2
-                WP+=2
-                print("Rogue sharpens his weapon. +2 Weapon Power") #Permanently gives Rogue +2 WP.
-                print("")
-                turn=False
+                spellcost=10
+
+                if MP<spellcost:
+                    print("You don't have enough mana to use that spell.")
+                
+                else:
+                    rogue[1]-=spellcost #Removes the mana cost.
+
+                    rogue[3]+=2
+                    WP+=2   #Gives Rogue +2 WP for the rest of the battle.
+
+                    print("Rogue sharpens his weapon. +2 Weapon Power")
+                    print("")
+                    turn=False
 
             elif spell == "sharpen":   #Causes error if not used by Rogue.
                 print("This character can't use this spell!")
