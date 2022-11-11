@@ -36,7 +36,7 @@ def rolld4(x):
 #ALLY STATS - The stats of every available party member.
 
 warrior=[32,5, 2,5,2] #HP, MP, AP, WP, INIT    ID=1
-priest= [20,25,0,2,6]                         #ID=2
+priest= [20,25,0,2,6]                          #ID=2
 rogue = [27,10,1,4,4]                          #ID=3
 
 
@@ -73,7 +73,6 @@ def chooseAlly():
 
 def chooseSpell(charID):
     global spell
-    print("")
     print("Choose a spell.")
     if charID == 1:
         print("RUSHDOWN")
@@ -95,10 +94,13 @@ def calculateDamage(WP,AP):
 def calculateValues(spell, WP):
     if spell=="rushdown":
         spellEffectValue= -1 * (WP+rolld4(1))
+
     elif spell=="mend":
         spellEffectValue= WP + rolld6(1)
+
     elif spell=="exorcism":
         spellEffectValue= -2 * rolld4(1)
+
     return spellEffectValue
 
 
@@ -248,11 +250,50 @@ def attackphase(characterID):        #Command for the attack phase
         
         while turn:
             chooseSpell(characterID)
+            print("")
             if spell == "rushdown" and characterID==1:
-                effectValue=calculateValues("rushdown",warrior[3])
+                effectValue=calculateValues("rushdown",WP)
+                chooseEnemy()
+                print("")
 
-            if spell == "mend" and characterID==2:
-                effectValue=calculateValues("mend",priest[3])
+            elif spell == "rushdown":
+                print("This character can't use this spell!")
+
+
+            elif spell == "mend" and characterID==2:
+                effectValue=calculateValues("mend",WP)
+                chooseAlly()
+                print("")
+
+            elif spell == "mend":
+                print("This character can't use this spell!")
+
+
+            elif spell == "exorcism" and characterID==2:
+                effectValue=calculateValues("exorcism",WP)
+                chooseEnemy()
+                print("")
+
+            elif spell == "exorcism":
+                print("This character can't use this spell!")
+
+
+            elif spell == "sharpen" and characterID==3:
+                rogue[3]+=1
+                WP+=1
+                print("Rogue sharpens his weapon. +1 Weapon Power")
+                print("")
+                turn=False
+
+            elif spell == "sharpen":
+                print("This character can't use this spell!")
+
+            else:
+                print("That's not a known spell.")
+    
+    else:
+        print("Unknown Command.")
+        attackphase(characterID)
 
 
         
@@ -275,32 +316,31 @@ while game:
 
     initphase(allies,wave1)
 
-    while len(allies)>0:
-        if warriorInit==order[-1]:
+    while len(order)>0:
+        if warriorInit==order[-1] and "Warrior" not in fainted:
             print("It's Warrior's turn.")
             order.remove(order[-1])
             attackphase(1)
         
-        elif priestInit==order[-1]:
+        elif priestInit==order[-1] and "Priest" not in fainted:
             print("It's Priest's turn.")
             order.remove(order[-1])
             attackphase(2)
         
-        elif rogueInit==order[-1]:
+        elif rogueInit==order[-1] and "Rogue" not in fainted:
             print("It's Rogue's turn.")
             order.remove(order[-1])
             attackphase(3)
 
-        elif orcwarriorAInit==order[-1]:
+        elif orcwarriorAInit==order[-1] and "Orc Warrior A" not in fainted:
             print("It's Orc Warrior A's turn.")
             order.remove(order[-1])
                 
-            
-        elif orcwarriorBInit==order[-1]:
+        elif orcwarriorBInit==order[-1] and "Orc Warrior B" not in fainted:
             print("It's Orc Warrior B's turn.")
             order.remove(order[-1])
 
-        elif orcarcherInit==order[-1]:
+        elif orcarcherInit==order[-1] and "Orc Archer" not in fainted:
             print("It's Orc Archer's turn.")
             order.remove(order[-1])
 
