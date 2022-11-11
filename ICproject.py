@@ -458,21 +458,24 @@ while game:
         if warriorInit==order[-1]:  #Starts the Warrior's turn if he's alive.
             if "Warrior" not in fainted:
                 print("It's Warrior's turn.")
-                attackphase(1)
+                if len(wave1)!=0:
+                    attackphase(1)
             order.remove(order[-1])
 
         
         elif priestInit==order[-1]:  #Starts the Priests's turn if he's alive.
             if "Priest" not in fainted:
                 print("It's Priest's turn.")
-                attackphase(2)
+                if len(wave1)!=0:
+                    attackphase(2)
             order.remove(order[-1])
                 
         
         elif rogueInit==order[-1]:  #Starts the Rogue's turn if he's alive.
             if "Rogue" not in fainted:
                 print("It's Rogue's turn.")
-                attackphase(3)
+                if len(wave1)!=0:
+                    attackphase(3)
             order.remove(order[-1])
 
         elif orcwarriorAInit==order[-1]:  #Starts the Orc Warrior A's turn if he's alive.
@@ -500,4 +503,5 @@ while game:
         game=False
         print("All enemies have been defeated.")
         print("You won the battle!")
+        print("")
         break          #(Defeat checks before Victory, so the player can't win with an empty party.)
