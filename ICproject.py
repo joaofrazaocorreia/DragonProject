@@ -192,19 +192,19 @@ def attackphase(characterID):
 
     if characterID==1:
         WP=warrior[3]
-    elif characterID==2:  #Assigns WP according to the character ID given.
+    elif characterID==2:  #Assigns a WP value according to the character ID given.
         WP=priest[3]
     elif characterID==3:
         WP=rogue[3]
 
     print("")
     print("What will you do?")
-    print("ATTACK / MAGIC")   #Prompts the player's choice for a command.
+    print("ATTACK / MAGIC")   #Prompts the player's choice for a battle command.
     command=input()
     command=command.lower()
     print("")
 
-    turn=True
+    turn=True  #Variable for looping until the turn successfully ends.
 
     if command=="attack":  #loop for the ATTACK command.
 
@@ -267,12 +267,12 @@ def attackphase(characterID):
                 print("")
                 if target=="orc warrior a" and "Orc Warrior A" not in fainted:
 
-                    orcw1[0]+=effectValue
+                    orcw1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values damage, Positive values heal.
 
                     print("Orc Warrior A took "+str(-effectValue)+" damage!")
                     print("")
                     if orcw1[0]<=0:
-                        wave1.remove("Orc Warrior A")
+                        wave1.remove("Orc Warrior A")   #Faints if health drops below 0
                         fainted.append("Orc Warrior A")
                         print("Orc Warrior A fainted!")
                         print("")
@@ -280,12 +280,12 @@ def attackphase(characterID):
 
                 elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
 
-                    orcw2[0]+=effectValue
+                    orcw2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values damage, Positive values heal.
 
                     print("Orc Warrior B took "+str(-effectValue)+" damage!")
                     print("")
                     if orcw2[0]<=0:
-                        wave1.remove("Orc Warrior B")
+                        wave1.remove("Orc Warrior B")   #Faints if health drops below 0
                         fainted.append("Orc Warrior B")
                         print("Orc Warrior B fainted!")
                         print("")
@@ -293,12 +293,12 @@ def attackphase(characterID):
 
                 elif target=="orc archer" and "Orc Archer" not in fainted:
 
-                    orca[0]+=effectValue
+                    orca[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values damage, Positive values heal.
 
                     print("Orc Archer took "+str(-effectValue)+" damage!")
                     print("")
                     if orca[0]<=0:
-                        wave1.remove("Orc Archer")
+                        wave1.remove("Orc Archer")   #Faints if health drops below 0
                         fainted.append("Orc Archer")
                         print("Orc Archer fainted!")
                         print("")
@@ -329,7 +329,7 @@ def attackphase(characterID):
             elif spell == "sharpen" and characterID==3:  #--SHARPEN-- spell
                 rogue[3]+=2
                 WP+=2
-                print("Rogue sharpens his weapon. +2 Weapon Power")
+                print("Rogue sharpens his weapon. +2 Weapon Power") #Permanently gives Rogue +2 WP.
                 print("")
                 turn=False
 
