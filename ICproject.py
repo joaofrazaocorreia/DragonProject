@@ -65,19 +65,19 @@ def turnOrder(x):   #TURN ORDER - Defines who goes first each turn during battle
 
 def chooseEnemy():  #CHOOSE ENEMY - Allows the player to choose an enemy target. Changes the "target" variable to an enemy of choice.
     global target
-    print("")
     print("Target an enemy!")
     print(str(wave1))
     target=input()
     target=target.lower()
+    print("--------------------------------------")
 
 def chooseAlly():  #CHOOSE ALLY - Allows the player to choose an allied target. Changes the "target" variable to an ally of choice.
     global target
-    print("")
     print("Target an ally!")
     print(str(allies))
     target=input()
     target=target.lower()
+    print("--------------------------------------")
 
 def chooseSpell(charID):  #CHOOSE SPELL - Allows the player to choose a spell. Displays different options depending on the character ID given.
     global spell
@@ -97,6 +97,7 @@ def chooseSpell(charID):  #CHOOSE SPELL - Allows the player to choose a spell. D
 
     spell=input()
     spell=spell.lower()
+    print("--------------------------------------")
 
 
 def calculateDamage(WP,AP):  #CALCULATE DAMAGE - Subtracts the given AP from the given WP. If the result is negative, it will return 0 instead.
@@ -158,6 +159,8 @@ def initphase():
         paladinInit=turnOrder(x)
         print("Paladin rolled "+str(paladinInit))
 
+    print("")
+
     if "Orc Warrior A" not in fainted:  #Orc Warrior A rolls for init if he's alive.
         x=orcw1
         global orcwarriorAInit
@@ -182,7 +185,7 @@ def initphase():
         orcarcherBInit=turnOrder(x)
         print("Orc Archer B rolled "+str(orcarcherBInit))
 
-    print("")
+    print("--------------------------------------")
 
 
     #Adds all alive characters' init values to the "order" list, and adds 0.1 if the value already exists.
@@ -249,12 +252,12 @@ def attackphase(characterID):
         WP=paladin[3]
         MP=paladin[1]
 
-    print("")
+
     print("What will you do?")
     print("ATTACK / MAGIC")   #Prompts the player's choice for a battle command.
     command=input()
     command=command.lower()
-    print("")
+    print("--------------------------------------")
 
     turn=True  #Variable for looping until the turn successfully ends.
 
@@ -264,19 +267,18 @@ def attackphase(characterID):
         while turn:
 
             chooseEnemy()  #The player chooses an enemy and their stats will be used for melee combat.
-            print("")
 
             if target=="orc warrior a" and "Orc Warrior A" not in fainted:  #Can only target orc warrior A if he's alive
                 AP=orcw1[2]
                 dmg=calculateDamage(WP,AP)
                 orcw1[0]-=dmg              #Calculates and subtracts damage from the target's hp.
                 print("Orc Warrior A took "+str(dmg)+" damage!")
-                print("")
+                print("--------------------------------------")
                 if orcw1[0]<=0:
                     wave1.remove("Orc Warrior A")   #Faints if health drops below 0
                     fainted.append("Orc Warrior A")
                     print("Orc Warrior A fainted!")
-                    print("")
+                    print("--------------------------------------")
                 turn=False
 
             elif target=="orc warrior b" and "Orc Warrior B" not in fainted:  #Can only target orc warrior B if he's alive
@@ -284,12 +286,12 @@ def attackphase(characterID):
                 dmg=calculateDamage(WP,AP)
                 orcw2[0]-=dmg              #Calculates and subtracts damage from the target's hp.
                 print("Orc Warrior B took "+str(dmg)+" damage!")
-                print("")
+                print("--------------------------------------")
                 if orcw2[0]<=0:
                     wave1.remove("Orc Warrior B")   #Faints if health drops below 0
                     fainted.append("Orc Warrior B")
                     print("Orc Warrior B fainted!")
-                    print("")
+                    print("--------------------------------------")
                 turn=False
 
             elif target=="orc archer a" and "Orc Archer A" not in fainted:  #Can only target orc archer A if he's alive
@@ -297,12 +299,12 @@ def attackphase(characterID):
                 dmg=calculateDamage(WP,AP)
                 orca1[0]-=dmg              #Calculates and subtracts damage from the target's hp.
                 print("Orc Archer A took "+str(dmg)+" damage!")
-                print("")
+                print("--------------------------------------")
                 if orca1[0]<=0:
                     wave1.remove("Orc Archer A")   #Faints if health drops below 0
                     fainted.append("Orc Archer A")
                     print("Orc Archer A fainted!")
-                    print("")
+                    print("--------------------------------------")
                 turn=False
             
             elif target=="orc archer b" and "Orc Archer B" not in fainted:  #Can only target orc archer B if he's alive
@@ -310,17 +312,17 @@ def attackphase(characterID):
                 dmg=calculateDamage(WP,AP)
                 orca2[0]-=dmg              #Calculates and subtracts damage from the target's hp.
                 print("Orc Archer B took "+str(dmg)+" damage!")
-                print("")
+                print("--------------------------------------")
                 if orca2[0]<=0:
                     wave1.remove("Orc Archer B")   #Faints if health drops below 0
                     fainted.append("Orc Archer B")
                     print("Orc Archer B fainted!")
-                    print("")
+                    print("--------------------------------------")
                 turn=False
 
             else:
                 print("That's not an enemy.") #Causes error if the target input is unknown, and loops back to the prompt.            
-                print("")
+                print("--------------------------------------")
 
 
 #-----------------------------------------------------------------------------------------------
@@ -328,7 +330,6 @@ def attackphase(characterID):
         
         while turn:
             chooseSpell(characterID)
-            print("")
 
             if spell == "rushdown" and characterID==1:   #--RUSHDOWN-- spell
                 spellcost=5
@@ -343,17 +344,16 @@ def attackphase(characterID):
 
                     effectValue=calculateValues("rushdown",WP)
                     chooseEnemy()
-                    print("")
                     if target=="orc warrior a" and "Orc Warrior A" not in fainted:
 
                         orcw1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
                         print("Orc Warrior A took "+str(-effectValue)+" damage!")
-                        print("")
+                        print("--------------------------------------")
                         if orcw1[0]<=0:
                             wave1.remove("Orc Warrior A")   #Faints if health drops below 0
                             fainted.append("Orc Warrior A")
                             print("Orc Warrior A fainted!")
-                            print("")
+                            print("--------------------------------------")
                         turn=False
 
                     elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
@@ -366,7 +366,7 @@ def attackphase(characterID):
                             wave1.remove("Orc Warrior B")   #Faints if health drops below 0
                             fainted.append("Orc Warrior B")
                             print("Orc Warrior B fainted!")
-                            print("")
+                            print("--------------------------------------")
                         turn=False
 
                     elif target=="orc archer a" and "Orc Archer A" not in fainted:
@@ -374,12 +374,12 @@ def attackphase(characterID):
                         orca1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Orc Archer A took "+str(-effectValue)+" damage!")
-                        print("")
+                        print("--------------------------------------")
                         if orca1[0]<=0:
                             wave1.remove("Orc Archer A")   #Faints if health drops below 0
                             fainted.append("Orc Archer A")
                             print("Orc Archer A fainted!")
-                            print("")
+                            print("--------------------------------------")
                         turn=False
                         
                     elif target=="orc archer b" and "Orc Archer B" not in fainted:
@@ -387,16 +387,17 @@ def attackphase(characterID):
                         orca2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Orc Archer B took "+str(-effectValue)+" damage!")
-                        print("")
+                        print("--------------------------------------")
                         if orca2[0]<=0:
                             wave1.remove("Orc Archer B")   #Faints if health drops below 0
                             fainted.append("Orc Archer B")
                             print("Orc Archer B fainted!")
-                            print("")
+                            print("--------------------------------------")
                         turn=False
 
             elif spell == "rushdown":   #Causes error if not used by Warrior.
                 print("This character can't use this spell!")
+                print("--------------------------------------")
 
 
             elif spell == "mend" and characterID==2:   #--MEND-- priest spell
@@ -412,12 +413,12 @@ def attackphase(characterID):
                     
                     effectValue=calculateValues("mend",WP)
                     chooseAlly()
-                    print("")
+
                     if target=="warrior" and "Warrior" not in fainted:
 
                         warrior[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
                         print("Warrior healed for "+str(effectValue)+" HP!")
-                        print("")
+                        print("--------------------------------------")
                         if warrior[0]>32: #If the target gets overhealed, resets HP to it's maximum.
                             warrior[0]=32
                         turn=False
@@ -427,7 +428,7 @@ def attackphase(characterID):
                         priest[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Priest healed for "+str(effectValue)+" HP!")
-                        print("")
+                        print("--------------------------------------")
                         if priest[0]>20: #If the target gets overhealed, resets HP to it's maximum.
                             priest[0]=20
                         turn=False
@@ -437,7 +438,7 @@ def attackphase(characterID):
                         rogue[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Rogue healed for "+str(effectValue)+" HP!")
-                        print("")
+                        print("--------------------------------------")
                         if rogue[0]>27: #If the target gets overhealed, resets HP to it's maximum.
                             rogue[0]=27
                         turn=False
@@ -447,7 +448,7 @@ def attackphase(characterID):
                         paladin[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Paladin healed for "+str(effectValue)+" HP!")
-                        print("")
+                        print("--------------------------------------")
                         if paladin[0]>45: #If the target gets overhealed, resets HP to it's maximum.
                             paladin[0]=45
                         turn=False
@@ -465,12 +466,12 @@ def attackphase(characterID):
                     
                     effectValue=calculateValues("mend",WP)
                     chooseAlly()
-                    print("")
+                    
                     if target=="warrior" and "Warrior" not in fainted:
 
                         warrior[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
                         print("Warrior healed for "+str(effectValue)+" HP!")
-                        print("")
+                        print("--------------------------------------")
                         if warrior[0]>32: #If the target gets overhealed, resets HP to it's maximum.
                             warrior[0]=32
                         turn=False
@@ -480,7 +481,7 @@ def attackphase(characterID):
                         priest[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Priest healed for "+str(effectValue)+" HP!")
-                        print("")
+                        print("--------------------------------------")
                         if priest[0]>20: #If the target gets overhealed, resets HP to it's maximum.
                             priest[0]=20
                         turn=False
@@ -490,7 +491,7 @@ def attackphase(characterID):
                         rogue[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Rogue healed for "+str(effectValue)+" HP!")
-                        print("")
+                        print("--------------------------------------")
                         if rogue[0]>27: #If the target gets overhealed, resets HP to it's maximum.
                             rogue[0]=27
                         turn=False
@@ -500,13 +501,14 @@ def attackphase(characterID):
                         paladin[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Paladin healed for "+str(effectValue)+" HP!")
-                        print("")
+                        print("--------------------------------------")
                         if paladin[0]>45: #If the target gets overhealed, resets HP to it's maximum.
                             paladin[0]=45
                         turn=False
 
             elif spell == "mend":   #Causes error if not used by Priest or Paladin.
                 print("This character can't use this spell!")
+                print("--------------------------------------")
 
             
             elif spell == "judgement" and characterID==4:  #--JUDGEMENT-- spell
@@ -522,17 +524,17 @@ def attackphase(characterID):
 
                     effectValue=calculateValues("judgement",WP)
                     chooseEnemy()
-                    print("")
+
                     if target=="orc warrior a" and "Orc Warrior A" not in fainted:
 
                         orcw1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
                         print("Orc Warrior A took "+str(-effectValue)+" damage!")
-                        print("")
+                        print("--------------------------------------")
                         if orcw1[0]<=0:
                             wave1.remove("Orc Warrior A")   #Faints if health drops below 0
                             fainted.append("Orc Warrior A")
                             print("Orc Warrior A fainted!")
-                            print("")
+                            print("--------------------------------------")
                         turn=False
 
                     elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
@@ -540,12 +542,12 @@ def attackphase(characterID):
                         orcw2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Orc Warrior B took "+str(-effectValue)+" damage!")
-                        print("")
+                        print("--------------------------------------")
                         if orcw2[0]<=0:
                             wave1.remove("Orc Warrior B")   #Faints if health drops below 0
                             fainted.append("Orc Warrior B")
                             print("Orc Warrior B fainted!")
-                            print("")
+                            print("--------------------------------------")
                         turn=False
 
                     elif target=="orc archer a" and "Orc Archer A" not in fainted:
@@ -553,12 +555,12 @@ def attackphase(characterID):
                         orca1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Orc Archer A took "+str(-effectValue)+" damage!")
-                        print("")
+                        print("--------------------------------------")
                         if orca1[0]<=0:
                             wave1.remove("Orc Archer A")   #Faints if health drops below 0
                             fainted.append("Orc Archer A")
                             print("Orc Archer A fainted!")
-                            print("")
+                            print("--------------------------------------")
                         turn=False
                         
                     elif target=="orc archer b" and "Orc Archer B" not in fainted:
@@ -566,12 +568,12 @@ def attackphase(characterID):
                         orca2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Orc Archer B took "+str(-effectValue)+" damage!")
-                        print("")
+                        print("--------------------------------------")
                         if orca2[0]<=0:
                             wave1.remove("Orc Archer B")   #Faints if health drops below 0
                             fainted.append("Orc Archer B")
                             print("Orc Archer B fainted!")
-                            print("")
+                            print("--------------------------------------")
                         turn=False
 
 
@@ -588,17 +590,17 @@ def attackphase(characterID):
 
                     effectValue=calculateValues("exorcism",WP)
                     chooseEnemy()
-                    print("")
+                    
                     if target=="orc warrior a" and "Orc Warrior A" not in fainted:
 
                         orcw1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
                         print("Orc Warrior A took "+str(-effectValue)+" damage!")
-                        print("")
+                        print("--------------------------------------")
                         if orcw1[0]<=0:
                             wave1.remove("Orc Warrior A")   #Faints if health drops below 0
                             fainted.append("Orc Warrior A")
                             print("Orc Warrior A fainted!")
-                            print("")
+                            print("--------------------------------------")
                         turn=False
 
                     elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
@@ -606,12 +608,12 @@ def attackphase(characterID):
                         orcw2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Orc Warrior B took "+str(-effectValue)+" damage!")
-                        print("")
+                        print("--------------------------------------")
                         if orcw2[0]<=0:
                             wave1.remove("Orc Warrior B")   #Faints if health drops below 0
                             fainted.append("Orc Warrior B")
                             print("Orc Warrior B fainted!")
-                            print("")
+                            print("--------------------------------------")
                         turn=False
 
                     elif target=="orc archer a" and "Orc Archer A" not in fainted:
@@ -619,12 +621,12 @@ def attackphase(characterID):
                         orca1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Orc Archer A took "+str(-effectValue)+" damage!")
-                        print("")
+                        print("--------------------------------------")
                         if orca1[0]<=0:
                             wave1.remove("Orc Archer A")   #Faints if health drops below 0
                             fainted.append("Orc Archer A")
                             print("Orc Archer A fainted!")
-                            print("")
+                            print("--------------------------------------")
                         turn=False
                         
                     elif target=="orc archer b" and "Orc Archer B" not in fainted:
@@ -632,16 +634,17 @@ def attackphase(characterID):
                         orca2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
 
                         print("Orc Archer B took "+str(-effectValue)+" damage!")
-                        print("")
+                        print("--------------------------------------")
                         if orca2[0]<=0:
                             wave1.remove("Orc Archer B")   #Faints if health drops below 0
                             fainted.append("Orc Archer B")
                             print("Orc Archer B fainted!")
-                            print("")
+                            print("--------------------------------------")
                         turn=False
 
             elif spell == "exorcism":   #Causes error if not used by Priest.
                 print("This character can't use this spell!")
+                print("--------------------------------------")
 
 
             elif spell == "sharpen" and characterID==3:  #--SHARPEN-- spell
@@ -659,14 +662,16 @@ def attackphase(characterID):
                     WP+=2   #Gives Rogue +2 WP for the rest of the battle.
 
                     print("Rogue sharpens their weapon. +2 Weapon Power")
-                    print("")
+                    print("--------------------------------------")
                     turn=False
 
             elif spell == "sharpen":   #Causes error if not used by Rogue.
                 print("This character can't use this spell!")
+                print("--------------------------------------")
 
             else:
                 print("That's not a known spell.")   #Causes error if the spell input is unknown, and loops back to the prompt.
+                print("--------------------------------------")
     
     else:
         print("Unknown Command.")  #Causes error if the battle command is unknown, and lopps back to the prompt.
@@ -685,82 +690,86 @@ def attackphase(characterID):
 game=True
 
 while game:
-    print("")
-    print("Turn Start!")
-    print("")
+    print("--------------------------------------")
+    print(">> Turn Start! <<")
+    print("--------------------------------------")
 
     initphase()
 
     while len(order)>0:  #Loops until all characters have ended their attack phase.
 
         if warriorInit==order[-1]:  #Starts the Warrior's turn if they're alive.
-            if "Warrior" not in fainted:
+            if "Warrior" not in fainted and len(wave1)!=0:
                 print("It's Warrior's turn.")
-                if len(wave1)!=0:
-                    attackphase(1)
+                print("")
+                attackphase(1)
             order.remove(order[-1])
 
         
         elif priestInit==order[-1]:  #Starts the Priests's turn if they're alive.
-            if "Priest" not in fainted:
+            if "Priest" not in fainted and len(wave1)!=0:
                 print("It's Priest's turn.")
-                if len(wave1)!=0:
-                    attackphase(2)
+                print("")
+                attackphase(2)
             order.remove(order[-1])
                 
         
         elif rogueInit==order[-1]:  #Starts the Rogue's turn if they're alive.
-            if "Rogue" not in fainted:
+            if "Rogue" not in fainted and len(wave1)!=0:
                 print("It's Rogue's turn.")
-                if len(wave1)!=0:
-                    attackphase(3)
+                print("")
+                attackphase(3)
             order.remove(order[-1])
 
         
         elif paladinInit==order[-1]:  #Starts the Paladin's turn if they're alive.
-            if "Paladin" not in fainted:
+            if "Paladin" not in fainted and len(wave1)!=0:
                 print("It's Paladin's turn.")
-                if len(wave1)!=0:
-                    attackphase(4)
+                print("")
+                attackphase(4)
             order.remove(order[-1])
 
 
         elif orcwarriorAInit==order[-1]:  #Starts the Orc Warrior A's turn if they're alive.
-            if "Orc Warrior A" not in fainted:
+            if "Orc Warrior A" not in fainted and len(allies)!=0:
                 print("It's Orc Warrior A's turn.")
+                print("")
             order.remove(order[-1])
                 
 
         elif orcwarriorBInit==order[-1]:  #Starts the Orc Warrior B's turn if they're alive.
-            if "Orc Warrior B" not in fainted:
+            if "Orc Warrior B" not in fainted and len(allies)!=0:
                 print("It's Orc Warrior B's turn.")
+                print("")
             order.remove(order[-1])
 
 
         elif orcarcherAInit==order[-1]:   #Starts the Orc Archer's turn if they're alive.
-            if "Orc Archer A" not in fainted:
+            if "Orc Archer A" not in fainted and len(allies)!=0:
                 print("It's Orc Archer A's turn.")
+                print("")
             order.remove(order[-1])
 
 
         elif orcarcherBInit==order[-1]:   #Starts the Orc Archer's turn if they're alive.
-            if "Orc Archer B" not in fainted:
+            if "Orc Archer B" not in fainted and len(allies)!=0:
                 print("It's Orc Archer B's turn.")
+                print("")
             order.remove(order[-1])
 
 
     if len(allies)==0: #DEFEAT CHECK - If the "allies" list is empty, the game ends and the player loses.
         game=False
-        print("")
+        print("--------------------------------------")
         print("You have no more allies than can fight.")
         print("You lost the battle!")
-        print("")
+        print("--------------------------------------")
         break
  
     if len(wave1)==0:  #VICTORY CHECK - If the "wave1" list is empty, the game ends and the player wins.
         game=False
-        print("")
+        print("--------------------------------------")
         print("All enemies have been defeated.")
         print("You won the battle!")
-        print("")
+        print("--------------------------------------")
         break          #(Defeat checks before Victory, so the player can't win with an empty party.)
