@@ -575,6 +575,10 @@ def attackphase(characterID):
                             print("Orc Archer B fainted!")
                             print("--------------------------------------")
                         turn=False
+                    
+            elif spell == "judgement":   #Causes error if not used by Paladin.
+                print("This character can't use this spell!")
+                print("--------------------------------------")
 
 
             elif spell == "exorcism" and characterID==2:  #--EXORCISM-- spell
