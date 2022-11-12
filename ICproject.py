@@ -10,7 +10,7 @@ d4=[1,2,3,4]  #4 sided dice
 
 allies=["Warrior","Priest","Rogue","Paladin"]  #ALLIES - Allies in the party (More can be added later)
 
-fainted=[]  #FAINTED - group for storing and registering characters who have been killed.
+fainted=[]  #FAINTED - array for storing and registering characters who have been killed.
 
 #WAVE1 - Enemies in the first wave of monsters (More waves and enemies can be added later)
 wave1=["Orc Warrior A","Orc Warrior B","Orc Archer A","Orc Archer B"] 
@@ -122,7 +122,7 @@ def calculateValues(spell, WP):  #CALCULATE VALUES - Depending on the spell give
     return spellEffectValue
 
 
-def updateValuesMelee(character,stats,WP):
+def updateValuesMelee(character,stats,WP): #UPDATE VALUES MELEE - Deals damage to the target using WP and AP. Used for the ATTACK command.
 
     AP=stats[2]
     dmg=calculateDamage(WP,AP)
@@ -135,22 +135,22 @@ def updateValuesMelee(character,stats,WP):
         print(character+" fainted!")
         print("--------------------------------------")
 
-def updateValuesMagic(character,stats,effectValue):
+def updateValuesMagic(character,stats,effectValue): #UPDATE VALUES MAGIC - Deals/Heals damage to the target using effectValue. Used for the MAGIC command.
 
-    if effectValue<=0:
+    if effectValue<=0:  # If effectValue is negative or 0, it's considered a damaging spell.
 
-        stats[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
+        stats[0]+=effectValue
         print(character+" took "+str(-effectValue)+" damage!")
         print("--------------------------------------")
         if stats[0]<=0:
-            wave1.remove(character)   #Faints the character if health drops below 0
+            wave1.remove(character)     #Faints the target if their health drops below 0.
             fainted.append(character)
             print(character+" fainted!")
             print("--------------------------------------")
     
-    elif effectValue>0:
+    elif effectValue>0:  # If effectValue is positive, it's considered a healing spell.
 
-        stats[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
+        stats[0]+=effectValue  
         print(character+" healed for "+str(effectValue)+" HP!")
         print("--------------------------------------")
 
@@ -165,6 +165,45 @@ def updateValuesMagic(character,stats,effectValue):
 
         if paladin[0]>45:
             paladin[0]=45
+
+def castSpell(spellcost,charID,stats):
+
+    global success
+    success=False
+
+    WP=stats[3]
+    MP=stats[1]
+
+    if MP<spellcost:
+        print("You don't have enough mana to use that spell.")
+        attackphase(charID) #Resets to the previous menu since there's no mana
+        success=True
+                
+    else:
+        stats[1]-=spellcost  #Removes the mana cost
+
+        effectValue=calculateValues("judgement",WP)
+        chooseEnemy()
+
+        if target=="orc warrior a" and "Orc Warrior A" not in fainted:
+
+            updateValuesMagic("Orc Warrior A",orcw1,effectValue)
+            success=True
+
+        elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
+
+            updateValuesMagic("Orc Warrior B",orcw2,effectValue)
+            success=True
+
+        elif target=="orc archer a" and "Orc Archer A" not in fainted:
+
+            updateValuesMagic("Orc Archer A",orca1,effectValue)
+            success=True
+                        
+        elif target=="orc archer b" and "Orc Archer B" not in fainted:
+
+            updateValuesMagic("Orc Archer B",orca2,effectValue)
+            success=True
 
 
 
@@ -375,6 +414,10 @@ def attackphase(characterID):
                         updateValuesMagic("Orc Archer B",orca2,effectValue)
                         turn=False
 
+                    else:
+                        print("That's not an enemy.") #Causes error if the target input is unknown, and loops back to the prompt.            
+                        print("--------------------------------------")
+
             elif spell == "rushdown":   #Causes error if not used by Warrior.
                 print("This character can't use this spell!")
                 print("--------------------------------------")
@@ -414,6 +457,10 @@ def attackphase(characterID):
                         updateValuesMagic("Paladin",paladin,effectValue)
                         turn=False
 
+                    else:
+                        print("That's not an ally.") #Causes error if the target input is unknown, and loops back to the prompt.            
+                        print("--------------------------------------")
+
             elif spell == "mend" and characterID==4:   #--MEND-- paladin spell
                 spellcost=3
 
@@ -448,12 +495,16 @@ def attackphase(characterID):
                         updateValuesMagic("Paladin",paladin,effectValue)
                         turn=False
 
+                    else:
+                        print("That's not an ally.") #Causes error if the target input is unknown, and loops back to the prompt.            
+                        print("--------------------------------------")
+
             elif spell == "mend":   #Causes error if not used by Priest or Paladin.
                 print("This character can't use this spell!")
                 print("--------------------------------------")
 
             
-            elif spell == "judgement" and characterID==4:  #--JUDGEMENT-- spell
+            elif spell == "jjudgement" and characterID==4:  #--JUDGEMENT-- spell
                 spellcost=9
 
                 if MP<spellcost:
@@ -486,6 +537,10 @@ def attackphase(characterID):
 
                         updateValuesMagic("Orc Archer B",orca2,effectValue)
                         turn=False
+
+                    else:
+                        print("That's not an enemy.") #Causes error if the target input is unknown, and loops back to the prompt.            
+                        print("--------------------------------------")
                     
             elif spell == "judgement":   #Causes error if not used by Paladin.
                 print("This character can't use this spell!")
@@ -525,6 +580,10 @@ def attackphase(characterID):
 
                         updateValuesMagic("Orc Archer B",orca2,effectValue)
                         turn=False
+
+                    else:
+                        print("That's not an enemy.") #Causes error if the target input is unknown, and loops back to the prompt.            
+                        print("--------------------------------------")
 
             elif spell == "exorcism":   #Causes error if not used by Priest.
                 print("This character can't use this spell!")
