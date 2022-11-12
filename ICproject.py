@@ -8,12 +8,15 @@ d8=[1,2,3,4,5,6,7,8]  #8 sided dice
 d6=[1,2,3,4,5,6]  #6 sided dice
 d4=[1,2,3,4]  #4 sided dice
 
+spells=["rushdown","mend","judgement","exorcism","sharpen"]
+
 allies=["Warrior","Priest","Rogue","Paladin"]  #ALLIES - Allies in the party (More can be added later)
 
 fainted=[]  #FAINTED - array for storing and registering characters who have been killed.
 
 #WAVE1 - Enemies in the first wave of monsters (More waves and enemies can be added later)
 wave1=["Orc Warrior A","Orc Warrior B","Orc Archer A","Orc Archer B"] 
+
 
 
 
@@ -166,45 +169,94 @@ def updateValuesMagic(character,stats,effectValue): #UPDATE VALUES MAGIC - Deals
         if paladin[0]>45:
             paladin[0]=45
 
-def castSpell(spellcost,charID,stats):
+def castSpell(spellname,charID,stats): #CAST SPELL - calls updateValuesMagic and executes based on the spell given
 
-    global success
+    global success  #"success" is used to change the "turn" variable off if the function executes properly.
     success=False
 
     WP=stats[3]
-    MP=stats[1]
+    MP=stats[1]  #Assigns WP and MP according to the character given
+
+    if spellname=="rushdown":
+        spellcost=5
+    elif spellname=="judgement":  #Assigns a mana cost depending on the spell chosen.
+        spellcost=9
+    elif spellname=="mend":
+        spellcost=3
+    elif spellname=="exorcism":
+        spellcost=5
 
     if MP<spellcost:
         print("You don't have enough mana to use that spell.")
+        print("--------------------------------------")
         attackphase(charID) #Resets to the previous menu since there's no mana
         success=True
                 
     else:
         stats[1]-=spellcost  #Removes the mana cost
 
-        effectValue=calculateValues("judgement",WP)
-        chooseEnemy()
+        effectValue=calculateValues(spellname,WP)
 
-        if target=="orc warrior a" and "Orc Warrior A" not in fainted:
+        if effectValue<=0: #If it's a damaging spell:
 
-            updateValuesMagic("Orc Warrior A",orcw1,effectValue)
-            success=True
+            while not success: #loops until the target is valid.
 
-        elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
+                chooseEnemy()
 
-            updateValuesMagic("Orc Warrior B",orcw2,effectValue)
-            success=True
+                if target=="orc warrior a" and "Orc Warrior A" not in fainted:
 
-        elif target=="orc archer a" and "Orc Archer A" not in fainted:
+                    updateValuesMagic("Orc Warrior A",orcw1,effectValue)
+                    success=True
 
-            updateValuesMagic("Orc Archer A",orca1,effectValue)
-            success=True
+                elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
+
+                    updateValuesMagic("Orc Warrior B",orcw2,effectValue)
+                    success=True
+
+                elif target=="orc archer a" and "Orc Archer A" not in fainted:
+
+                    updateValuesMagic("Orc Archer A",orca1,effectValue)
+                    success=True
                         
-        elif target=="orc archer b" and "Orc Archer B" not in fainted:
+                elif target=="orc archer b" and "Orc Archer B" not in fainted:
 
-            updateValuesMagic("Orc Archer B",orca2,effectValue)
-            success=True
+                    updateValuesMagic("Orc Archer B",orca2,effectValue)
+                    success=True
 
+                else:
+                    print("That's not an enemy.") #Causes error if the target input is unknown, and loops back to the prompt.            
+                    print("--------------------------------------")
+
+
+        else: #If it's a healing spell:
+
+            while not success: #loops until the target is valid.
+
+                chooseAlly()
+                    
+                if target=="warrior" and "Warrior" not in fainted:
+
+                    updateValuesMagic("Warrior",warrior,effectValue)
+                    success=True
+
+                elif target=="priest" and "Priest" not in fainted:
+
+                    updateValuesMagic("Priest",priest,effectValue)
+                    success=True
+
+                elif target=="rogue" and "Rogue" not in fainted:
+
+                    updateValuesMagic("Rogue",rogue,effectValue)
+                    success=True
+
+                elif target=="paladin" and "Paladin" not in fainted:
+
+                    updateValuesMagic("Paladin",paladin,effectValue)
+                    success=True
+
+                else:
+                    print("That's not an ally.") #Causes error if the target input is unknown, and loops back to the prompt.            
+                    print("--------------------------------------")
 
 
 #-----------------------------------------------------------------------------------------------
@@ -343,7 +395,7 @@ def attackphase(characterID):
 
     turn=True  #Variable for looping until the turn successfully ends.
 
-#-----------------------------------------------------------------------------------------------
+
     if command=="attack":  #loop for the ATTACK command.
 
         while turn:
@@ -375,219 +427,44 @@ def attackphase(characterID):
                 print("--------------------------------------")
 
 
-#-----------------------------------------------------------------------------------------------
+
     elif command=="magic": #loop for the MAGIC command.
         
         while turn:
             chooseSpell(characterID)
 
             if spell == "rushdown" and characterID==1:   #--RUSHDOWN-- spell
-                spellcost=5
 
-                if MP<spellcost:
-                    print("You don't have enough mana to use that spell.")
-                    attackphase(characterID) #Resets to the previous menu since there's no mana
+                castSpell(spell,1,warrior)
+                if success:
                     turn=False
+
+
+            elif spell == "mend" and characterID==2:   #--MEND-- spell 1 (Priest)
                 
-                else:
-                    warrior[1]-=spellcost  #Removes the mana cost
-
-                    effectValue=calculateValues("rushdown",WP)
-                    chooseEnemy()
-                    if target=="orc warrior a" and "Orc Warrior A" not in fainted:
-
-                        updateValuesMagic("Orc Warrior A",orcw1,effectValue)
-                        turn=False
-
-                    elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
-
-                        updateValuesMagic("Orc Warrior B",orcw2,effectValue)
-                        turn=False
-
-                    elif target=="orc archer a" and "Orc Archer A" not in fainted:
-
-                        updateValuesMagic("Orc Archer A",orca1,effectValue)
-                        turn=False
-                        
-                    elif target=="orc archer b" and "Orc Archer B" not in fainted:
-
-                        updateValuesMagic("Orc Archer B",orca2,effectValue)
-                        turn=False
-
-                    else:
-                        print("That's not an enemy.") #Causes error if the target input is unknown, and loops back to the prompt.            
-                        print("--------------------------------------")
-
-            elif spell == "rushdown":   #Causes error if not used by Warrior.
-                print("This character can't use this spell!")
-                print("--------------------------------------")
-
-
-            elif spell == "mend" and characterID==2:   #--MEND-- priest spell
-                spellcost=3
-
-                if MP<spellcost:
-                    print("You don't have enough mana to use that spell.")
-                    attackphase(characterID) #Resets to the previous menu since there's no mana
+                castSpell(spell,2,priest)
+                if success:
                     turn=False
+
+            elif spell == "mend" and characterID==4:   #--MEND-- spell 2 (Paladin)
                 
-                else:
-                    priest[1]-=spellcost  #Removes the mana cost
-                    
-                    effectValue=calculateValues("mend",WP)
-                    chooseAlly()
-
-                    if target=="warrior" and "Warrior" not in fainted:
-
-                        updateValuesMagic("Warrior",warrior,effectValue)
-                        turn=False
-
-                    elif target=="priest" and "Priest" not in fainted:
-
-                        updateValuesMagic("Priest",priest,effectValue)
-                        turn=False
-
-                    elif target=="rogue" and "Rogue" not in fainted:
-
-                        updateValuesMagic("Rogue",rogue,effectValue)
-                        turn=False
-
-                    elif target=="paladin" and "Paladin" not in fainted:
-
-                        updateValuesMagic("Paladin",paladin,effectValue)
-                        turn=False
-
-                    else:
-                        print("That's not an ally.") #Causes error if the target input is unknown, and loops back to the prompt.            
-                        print("--------------------------------------")
-
-            elif spell == "mend" and characterID==4:   #--MEND-- paladin spell
-                spellcost=3
-
-                if MP<spellcost:
-                    print("You don't have enough mana to use that spell.")
-                    attackphase(characterID) #Resets to the previous menu since there's no mana
+                castSpell(spell,4,paladin)
+                if success:
                     turn=False
-                
-                else:
-                    paladin[1]-=spellcost  #Removes the mana cost
-                    
-                    effectValue=calculateValues("mend",WP)
-                    chooseAlly()
-                    
-                    if target=="warrior" and "Warrior" not in fainted:
-
-                        updateValuesMagic("Warrior",warrior,effectValue)
-                        turn=False
-
-                    elif target=="priest" and "Priest" not in fainted:
-
-                        updateValuesMagic("Priest",priest,effectValue)
-                        turn=False
-
-                    elif target=="rogue" and "Rogue" not in fainted:
-
-                        updateValuesMagic("Rogue",rogue,effectValue)
-                        turn=False
-
-                    elif target=="paladin" and "Paladin" not in fainted:
-
-                        updateValuesMagic("Paladin",paladin,effectValue)
-                        turn=False
-
-                    else:
-                        print("That's not an ally.") #Causes error if the target input is unknown, and loops back to the prompt.            
-                        print("--------------------------------------")
-
-            elif spell == "mend":   #Causes error if not used by Priest or Paladin.
-                print("This character can't use this spell!")
-                print("--------------------------------------")
 
             
-            elif spell == "jjudgement" and characterID==4:  #--JUDGEMENT-- spell
-                spellcost=9
-
-                if MP<spellcost:
-                    print("You don't have enough mana to use that spell.")
-                    attackphase(characterID) #Resets to the previous menu since there's no mana
-                    turn=False
+            elif spell == "judgement" and characterID==4:  #--JUDGEMENT-- spell
                 
-                else:
-                    paladin[1]-=spellcost  #Removes the mana cost
-
-                    effectValue=calculateValues("judgement",WP)
-                    chooseEnemy()
-
-                    if target=="orc warrior a" and "Orc Warrior A" not in fainted:
-
-                        updateValuesMagic("Orc Warrior A",orcw1,effectValue)
-                        turn=False
-
-                    elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
-
-                        updateValuesMagic("Orc Warrior B",orcw2,effectValue)
-                        turn=False
-
-                    elif target=="orc archer a" and "Orc Archer A" not in fainted:
-
-                        updateValuesMagic("Orc Archer A",orca1,effectValue)
-                        turn=False
-                        
-                    elif target=="orc archer b" and "Orc Archer B" not in fainted:
-
-                        updateValuesMagic("Orc Archer B",orca2,effectValue)
-                        turn=False
-
-                    else:
-                        print("That's not an enemy.") #Causes error if the target input is unknown, and loops back to the prompt.            
-                        print("--------------------------------------")
-                    
-            elif spell == "judgement":   #Causes error if not used by Paladin.
-                print("This character can't use this spell!")
-                print("--------------------------------------")
+                castSpell(spell,4,paladin)
+                if success:
+                    turn=False
 
 
             elif spell == "exorcism" and characterID==2:  #--EXORCISM-- spell
-                spellcost=5
-
-                if MP<spellcost:
-                    print("You don't have enough mana to use that spell.")
-                    attackphase(characterID) #Resets to the previous menu since there's no mana
-                    turn=False
                 
-                else:
-                    priest[1]-=spellcost  #Removes the mana cost
-
-                    effectValue=calculateValues("exorcism",WP)
-                    chooseEnemy()
-                    
-                    if target=="orc warrior a" and "Orc Warrior A" not in fainted:
-
-                        updateValuesMagic("Orc Warrior A",orcw1,effectValue)
-                        turn=False
-
-                    elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
-
-                        updateValuesMagic("Orc Warrior B",orcw2,effectValue)
-                        turn=False
-
-                    elif target=="orc archer a" and "Orc Archer A" not in fainted:
-
-                        updateValuesMagic("Orc Archer A",orca1,effectValue)
-                        turn=False
-                        
-                    elif target=="orc archer b" and "Orc Archer B" not in fainted:
-
-                        updateValuesMagic("Orc Archer B",orca2,effectValue)
-                        turn=False
-
-                    else:
-                        print("That's not an enemy.") #Causes error if the target input is unknown, and loops back to the prompt.            
-                        print("--------------------------------------")
-
-            elif spell == "exorcism":   #Causes error if not used by Priest.
-                print("This character can't use this spell!")
-                print("--------------------------------------")
+                castSpell(spell,2,priest)
+                if success:
+                    turn=False
 
 
             elif spell == "sharpen" and characterID==3:  #--SHARPEN-- spell
@@ -604,16 +481,16 @@ def attackphase(characterID):
                     rogue[3]+=2
                     WP+=2   #Gives Rogue +2 WP for the rest of the battle.
 
-                    print("Rogue sharpens their weapon. +2 Weapon Power")
+                    print("Rogue magically sharpens their weapon. They permanently gain +2 Weapon Power!")
                     print("--------------------------------------")
                     turn=False
 
-            elif spell == "sharpen":   #Causes error if not used by Rogue.
+            elif spell in spells:   #Causes an error if the spell isn't known by the character who chose it, and loops back to the prompt.
                 print("This character can't use this spell!")
                 print("--------------------------------------")
 
             else:
-                print("That's not a known spell.")   #Causes error if the spell input is unknown, and loops back to the prompt.
+                print("That's not a known spell.")   #Causes an error if the spell input is unknown, and loops back to the prompt.
                 print("--------------------------------------")
     
     else:
