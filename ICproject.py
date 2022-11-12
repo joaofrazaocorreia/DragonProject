@@ -121,7 +121,50 @@ def calculateValues(spell, WP):  #CALCULATE VALUES - Depending on the spell give
 
     return spellEffectValue
 
-#def updateValues():
+
+def updateValuesMelee(character,stats,WP):
+
+    AP=stats[2]
+    dmg=calculateDamage(WP,AP)
+    stats[0]-=dmg              #Calculates and subtracts damage from the target's hp.
+    print(character+" took "+str(dmg)+" damage!")
+    print("--------------------------------------")
+    if stats[0]<=0:
+        wave1.remove(character)   #Faints if health drops below 0
+        fainted.append(character)
+        print(character+" fainted!")
+        print("--------------------------------------")
+
+def updateValuesMagic(character,stats,effectValue):
+
+    if effectValue<=0:
+
+        stats[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
+        print(character+" took "+str(-effectValue)+" damage!")
+        print("--------------------------------------")
+        if stats[0]<=0:
+            wave1.remove(character)   #Faints the character if health drops below 0
+            fainted.append(character)
+            print(character+" fainted!")
+            print("--------------------------------------")
+    
+    elif effectValue>0:
+
+        stats[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
+        print(character+" healed for "+str(effectValue)+" HP!")
+        print("--------------------------------------")
+
+        if warrior[0]>32:
+            warrior[0]=32
+
+        if priest[0]>20:
+            priest[0]=20
+                            #If the target gets overhealed, their hp resets to it's maximum.
+        if rogue[0]>27:
+            rogue[0]=27
+
+        if paladin[0]>45:
+            paladin[0]=45
 
 
 
@@ -269,55 +312,23 @@ def attackphase(characterID):
             chooseEnemy()  #The player chooses an enemy and their stats will be used for melee combat.
 
             if target=="orc warrior a" and "Orc Warrior A" not in fainted:  #Can only target orc warrior A if he's alive
-                AP=orcw1[2]
-                dmg=calculateDamage(WP,AP)
-                orcw1[0]-=dmg              #Calculates and subtracts damage from the target's hp.
-                print("Orc Warrior A took "+str(dmg)+" damage!")
-                print("--------------------------------------")
-                if orcw1[0]<=0:
-                    wave1.remove("Orc Warrior A")   #Faints if health drops below 0
-                    fainted.append("Orc Warrior A")
-                    print("Orc Warrior A fainted!")
-                    print("--------------------------------------")
+
+                updateValuesMelee("Orc Warrior A",orcw1,WP)
                 turn=False
 
             elif target=="orc warrior b" and "Orc Warrior B" not in fainted:  #Can only target orc warrior B if he's alive
-                AP=orcw2[2]
-                dmg=calculateDamage(WP,AP)
-                orcw2[0]-=dmg              #Calculates and subtracts damage from the target's hp.
-                print("Orc Warrior B took "+str(dmg)+" damage!")
-                print("--------------------------------------")
-                if orcw2[0]<=0:
-                    wave1.remove("Orc Warrior B")   #Faints if health drops below 0
-                    fainted.append("Orc Warrior B")
-                    print("Orc Warrior B fainted!")
-                    print("--------------------------------------")
+                
+                updateValuesMelee("Orc Warrior B",orcw2,WP)
                 turn=False
 
             elif target=="orc archer a" and "Orc Archer A" not in fainted:  #Can only target orc archer A if he's alive
-                AP=orca1[2]
-                dmg=calculateDamage(WP,AP)
-                orca1[0]-=dmg              #Calculates and subtracts damage from the target's hp.
-                print("Orc Archer A took "+str(dmg)+" damage!")
-                print("--------------------------------------")
-                if orca1[0]<=0:
-                    wave1.remove("Orc Archer A")   #Faints if health drops below 0
-                    fainted.append("Orc Archer A")
-                    print("Orc Archer A fainted!")
-                    print("--------------------------------------")
+                
+                updateValuesMelee("Orc Archer A",orca1,WP)
                 turn=False
             
             elif target=="orc archer b" and "Orc Archer B" not in fainted:  #Can only target orc archer B if he's alive
-                AP=orca2[2]
-                dmg=calculateDamage(WP,AP)
-                orca2[0]-=dmg              #Calculates and subtracts damage from the target's hp.
-                print("Orc Archer B took "+str(dmg)+" damage!")
-                print("--------------------------------------")
-                if orca2[0]<=0:
-                    wave1.remove("Orc Archer B")   #Faints if health drops below 0
-                    fainted.append("Orc Archer B")
-                    print("Orc Archer B fainted!")
-                    print("--------------------------------------")
+                
+                updateValuesMelee("Orc Archer B",orca2,WP)
                 turn=False
 
             else:
@@ -346,53 +357,22 @@ def attackphase(characterID):
                     chooseEnemy()
                     if target=="orc warrior a" and "Orc Warrior A" not in fainted:
 
-                        orcw1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-                        print("Orc Warrior A took "+str(-effectValue)+" damage!")
-                        print("--------------------------------------")
-                        if orcw1[0]<=0:
-                            wave1.remove("Orc Warrior A")   #Faints if health drops below 0
-                            fainted.append("Orc Warrior A")
-                            print("Orc Warrior A fainted!")
-                            print("--------------------------------------")
+                        updateValuesMagic("Orc Warrior A",orcw1,effectValue)
                         turn=False
 
                     elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
 
-                        orcw2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Orc Warrior B took "+str(-effectValue)+" damage!")
-                        print("")
-                        if orcw2[0]<=0:
-                            wave1.remove("Orc Warrior B")   #Faints if health drops below 0
-                            fainted.append("Orc Warrior B")
-                            print("Orc Warrior B fainted!")
-                            print("--------------------------------------")
+                        updateValuesMagic("Orc Warrior B",orcw2,effectValue)
                         turn=False
 
                     elif target=="orc archer a" and "Orc Archer A" not in fainted:
 
-                        orca1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Orc Archer A took "+str(-effectValue)+" damage!")
-                        print("--------------------------------------")
-                        if orca1[0]<=0:
-                            wave1.remove("Orc Archer A")   #Faints if health drops below 0
-                            fainted.append("Orc Archer A")
-                            print("Orc Archer A fainted!")
-                            print("--------------------------------------")
+                        updateValuesMagic("Orc Archer A",orca1,effectValue)
                         turn=False
                         
                     elif target=="orc archer b" and "Orc Archer B" not in fainted:
 
-                        orca2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Orc Archer B took "+str(-effectValue)+" damage!")
-                        print("--------------------------------------")
-                        if orca2[0]<=0:
-                            wave1.remove("Orc Archer B")   #Faints if health drops below 0
-                            fainted.append("Orc Archer B")
-                            print("Orc Archer B fainted!")
-                            print("--------------------------------------")
+                        updateValuesMagic("Orc Archer B",orca2,effectValue)
                         turn=False
 
             elif spell == "rushdown":   #Causes error if not used by Warrior.
@@ -416,41 +396,22 @@ def attackphase(characterID):
 
                     if target=="warrior" and "Warrior" not in fainted:
 
-                        warrior[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-                        print("Warrior healed for "+str(effectValue)+" HP!")
-                        print("--------------------------------------")
-                        if warrior[0]>32: #If the target gets overhealed, resets HP to it's maximum.
-                            warrior[0]=32
+                        updateValuesMagic("Warrior",warrior,effectValue)
                         turn=False
 
                     elif target=="priest" and "Priest" not in fainted:
 
-                        priest[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Priest healed for "+str(effectValue)+" HP!")
-                        print("--------------------------------------")
-                        if priest[0]>20: #If the target gets overhealed, resets HP to it's maximum.
-                            priest[0]=20
+                        updateValuesMagic("Priest",priest,effectValue)
                         turn=False
 
                     elif target=="rogue" and "Rogue" not in fainted:
 
-                        rogue[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Rogue healed for "+str(effectValue)+" HP!")
-                        print("--------------------------------------")
-                        if rogue[0]>27: #If the target gets overhealed, resets HP to it's maximum.
-                            rogue[0]=27
+                        updateValuesMagic("Rogue",rogue,effectValue)
                         turn=False
 
                     elif target=="paladin" and "Paladin" not in fainted:
 
-                        paladin[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Paladin healed for "+str(effectValue)+" HP!")
-                        print("--------------------------------------")
-                        if paladin[0]>45: #If the target gets overhealed, resets HP to it's maximum.
-                            paladin[0]=45
+                        updateValuesMagic("Paladin",paladin,effectValue)
                         turn=False
 
             elif spell == "mend" and characterID==4:   #--MEND-- paladin spell
@@ -469,41 +430,22 @@ def attackphase(characterID):
                     
                     if target=="warrior" and "Warrior" not in fainted:
 
-                        warrior[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-                        print("Warrior healed for "+str(effectValue)+" HP!")
-                        print("--------------------------------------")
-                        if warrior[0]>32: #If the target gets overhealed, resets HP to it's maximum.
-                            warrior[0]=32
+                        updateValuesMagic("Warrior",warrior,effectValue)
                         turn=False
 
                     elif target=="priest" and "Priest" not in fainted:
 
-                        priest[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Priest healed for "+str(effectValue)+" HP!")
-                        print("--------------------------------------")
-                        if priest[0]>20: #If the target gets overhealed, resets HP to it's maximum.
-                            priest[0]=20
+                        updateValuesMagic("Priest",priest,effectValue)
                         turn=False
 
                     elif target=="rogue" and "Rogue" not in fainted:
 
-                        rogue[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Rogue healed for "+str(effectValue)+" HP!")
-                        print("--------------------------------------")
-                        if rogue[0]>27: #If the target gets overhealed, resets HP to it's maximum.
-                            rogue[0]=27
+                        updateValuesMagic("Rogue",rogue,effectValue)
                         turn=False
 
                     elif target=="paladin" and "Paladin" not in fainted:
 
-                        paladin[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Paladin healed for "+str(effectValue)+" HP!")
-                        print("--------------------------------------")
-                        if paladin[0]>45: #If the target gets overhealed, resets HP to it's maximum.
-                            paladin[0]=45
+                        updateValuesMagic("Paladin",paladin,effectValue)
                         turn=False
 
             elif spell == "mend":   #Causes error if not used by Priest or Paladin.
@@ -527,53 +469,22 @@ def attackphase(characterID):
 
                     if target=="orc warrior a" and "Orc Warrior A" not in fainted:
 
-                        orcw1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-                        print("Orc Warrior A took "+str(-effectValue)+" damage!")
-                        print("--------------------------------------")
-                        if orcw1[0]<=0:
-                            wave1.remove("Orc Warrior A")   #Faints if health drops below 0
-                            fainted.append("Orc Warrior A")
-                            print("Orc Warrior A fainted!")
-                            print("--------------------------------------")
+                        updateValuesMagic("Orc Warrior A",orcw1,effectValue)
                         turn=False
 
                     elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
 
-                        orcw2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Orc Warrior B took "+str(-effectValue)+" damage!")
-                        print("--------------------------------------")
-                        if orcw2[0]<=0:
-                            wave1.remove("Orc Warrior B")   #Faints if health drops below 0
-                            fainted.append("Orc Warrior B")
-                            print("Orc Warrior B fainted!")
-                            print("--------------------------------------")
+                        updateValuesMagic("Orc Warrior B",orcw2,effectValue)
                         turn=False
 
                     elif target=="orc archer a" and "Orc Archer A" not in fainted:
 
-                        orca1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Orc Archer A took "+str(-effectValue)+" damage!")
-                        print("--------------------------------------")
-                        if orca1[0]<=0:
-                            wave1.remove("Orc Archer A")   #Faints if health drops below 0
-                            fainted.append("Orc Archer A")
-                            print("Orc Archer A fainted!")
-                            print("--------------------------------------")
+                        updateValuesMagic("Orc Archer A",orca1,effectValue)
                         turn=False
                         
                     elif target=="orc archer b" and "Orc Archer B" not in fainted:
 
-                        orca2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Orc Archer B took "+str(-effectValue)+" damage!")
-                        print("--------------------------------------")
-                        if orca2[0]<=0:
-                            wave1.remove("Orc Archer B")   #Faints if health drops below 0
-                            fainted.append("Orc Archer B")
-                            print("Orc Archer B fainted!")
-                            print("--------------------------------------")
+                        updateValuesMagic("Orc Archer B",orca2,effectValue)
                         turn=False
                     
             elif spell == "judgement":   #Causes error if not used by Paladin.
@@ -597,53 +508,22 @@ def attackphase(characterID):
                     
                     if target=="orc warrior a" and "Orc Warrior A" not in fainted:
 
-                        orcw1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-                        print("Orc Warrior A took "+str(-effectValue)+" damage!")
-                        print("--------------------------------------")
-                        if orcw1[0]<=0:
-                            wave1.remove("Orc Warrior A")   #Faints if health drops below 0
-                            fainted.append("Orc Warrior A")
-                            print("Orc Warrior A fainted!")
-                            print("--------------------------------------")
+                        updateValuesMagic("Orc Warrior A",orcw1,effectValue)
                         turn=False
 
                     elif target=="orc warrior b" and "Orc Warrior B" not in fainted:
 
-                        orcw2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Orc Warrior B took "+str(-effectValue)+" damage!")
-                        print("--------------------------------------")
-                        if orcw2[0]<=0:
-                            wave1.remove("Orc Warrior B")   #Faints if health drops below 0
-                            fainted.append("Orc Warrior B")
-                            print("Orc Warrior B fainted!")
-                            print("--------------------------------------")
+                        updateValuesMagic("Orc Warrior B",orcw2,effectValue)
                         turn=False
 
                     elif target=="orc archer a" and "Orc Archer A" not in fainted:
 
-                        orca1[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Orc Archer A took "+str(-effectValue)+" damage!")
-                        print("--------------------------------------")
-                        if orca1[0]<=0:
-                            wave1.remove("Orc Archer A")   #Faints if health drops below 0
-                            fainted.append("Orc Archer A")
-                            print("Orc Archer A fainted!")
-                            print("--------------------------------------")
+                        updateValuesMagic("Orc Archer A",orca1,effectValue)
                         turn=False
                         
                     elif target=="orc archer b" and "Orc Archer B" not in fainted:
 
-                        orca2[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
-
-                        print("Orc Archer B took "+str(-effectValue)+" damage!")
-                        print("--------------------------------------")
-                        if orca2[0]<=0:
-                            wave1.remove("Orc Archer B")   #Faints if health drops below 0
-                            fainted.append("Orc Archer B")
-                            print("Orc Archer B fainted!")
-                            print("--------------------------------------")
+                        updateValuesMagic("Orc Archer B",orca2,effectValue)
                         turn=False
 
             elif spell == "exorcism":   #Causes error if not used by Priest.
