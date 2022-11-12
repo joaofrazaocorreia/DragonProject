@@ -345,6 +345,34 @@ def attackphase(characterID):
                     effectValue=calculateValues("mend",WP)
                     chooseAlly()
                     print("")
+                    if target=="warrior" and "Warrior" not in fainted:
+
+                        warrior[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
+                        print("Warrior healed for "+str(effectValue)+" HP!")
+                        print("")
+                        if warrior[0]>32: #If the target gets overhealed, resets HP to it's maximum.
+                            warrior[0]=32
+                        turn=False
+
+                    elif target=="priest" and "Priest" not in fainted:
+
+                        priest[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
+
+                        print("Priest healed for "+str(effectValue)+" HP!")
+                        print("")
+                        if priest[0]>20: #If the target gets overhealed, resets HP to it's maximum.
+                            priest[0]=20
+                        turn=False
+
+                    elif target=="rogue" and "Rogue" not in fainted:
+
+                        rogue[0]+=effectValue  #Adds the spell's value to the target's HP. Negative values deal damage, Positive values heal.
+
+                        print("Rogue healed for "+str(effectValue)+" HP!")
+                        print("")
+                        if rogue[0]>27: #If the target gets overhealed, resets HP to it's maximum.
+                            rogue[0]=27
+                        turn=False
 
             elif spell == "mend":   #Causes error if not used by Priest.
                 print("This character can't use this spell!")
@@ -420,7 +448,7 @@ def attackphase(characterID):
                     rogue[3]+=2
                     WP+=2   #Gives Rogue +2 WP for the rest of the battle.
 
-                    print("Rogue sharpens his weapon. +2 Weapon Power")
+                    print("Rogue sharpens their weapon. +2 Weapon Power")
                     print("")
                     turn=False
 
@@ -495,12 +523,15 @@ while game:
 
     if len(allies)==0: #DEFEAT CHECK - If the "allies" list is empty, the game ends and the player loses.
         game=False
+        print("")
         print("You have no more allies than can fight.")
         print("You lost the battle!")
+        print("")
         break
  
     if len(wave1)==0:  #VICTORY CHECK - If the "wave1" list is empty, the game ends and the player wins.
         game=False
+        print("")
         print("All enemies have been defeated.")
         print("You won the battle!")
         print("")
