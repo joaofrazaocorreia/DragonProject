@@ -18,8 +18,6 @@ fainted=[]  #FAINTED - array for storing and registering characters who have bee
 wave1=["Orc Warrior A","Orc Warrior B","Orc Archer A","Orc Archer B"] 
 
 
-
-
 #-----------------------------------------------------------------------------------------------
 #DICE ROLLS - Commands for rolling die.
 
@@ -45,7 +43,7 @@ def rolld4():
 warrior=[32,5, 2,5,2] #HP, MP, AP, WP, INIT     ID=1
 priest= [20,25,0,2,6]                         # ID=2
 rogue = [23,10,1,4,4]                         # ID=3
-paladin=[45,15,3,3,1]                         # ID=4
+paladin=[45,15,1,3,1]                         # ID=4
 
 
 #-----------------------------------------------------------------------------------------------
@@ -82,21 +80,39 @@ def chooseAlly():  #CHOOSE ALLY - Allows the player to choose an allied target. 
     target=target.lower()
     print("--------------------------------------")
 
+def enemyChooses(charID): #ENEMY CHOOSES - The game randomly chooses an allied target. Changes the "target" variable to a random ally.
+    global target
+
+    if charID==5:
+        character="Orc Warrior A"
+    elif charID==6:
+        character="Orc Warrior B"  #Assigns the attacker's name based on the ID given
+    elif charID==7:
+        character="Orc Archer A"
+    elif charID==8:
+        character="Orc Archer B"
+
+    target=random.sample(allies,1)
+    print(character+" attacks "+target[0]+"!")  #This command also tells the player which character attacked which.
+    target=target[0].lower()
+    print("--------------------------------------")
+
+
 def chooseSpell(charID):  #CHOOSE SPELL - Allows the player to choose a spell. Displays different options depending on the character ID given.
     global spell
     print("Choose a spell.")
 
     if charID == 1:
-        print("RUSHDOWN")
+        print("RUSHDOWN - 5 MP")
 
     elif charID == 2:
-        print("MEND / EXORCISM")
+        print("MEND - 3 MP // EXORCISM - 5 MP")
 
     elif charID == 3:
         print("SHARPEN")
 
     elif charID == 4:
-        print("MEND / JUDGEMENT")
+        print("MEND - 3 MP // JUDGEMENT - 9 MP")
 
     spell=input()
     spell=spell.lower()
@@ -257,6 +273,34 @@ def castSpell(spellname,charID,stats): #CAST SPELL - calls updateValuesMagic and
                 else:
                     print("That's not an ally.") #Causes error if the target input is unknown, and loops back to the prompt.            
                     print("--------------------------------------")
+
+
+def displayStatus(): #DISPLAY STATUS - This command displays the current status of the battle, such as stats and which characters are alive.
+
+    print(str(len(wave1))+" enemies remain!")
+    print("")
+
+    if "Orc Warrior A" not in fainted:
+        print("Orc Warrior A: "+str(orcw1[0])+" HP")
+    if "Orc Warrior B" not in fainted:
+        print("Orc Warrior B: "+str(orcw2[0])+" HP")
+    if "Orc Archer A" not in fainted:          #Orcs don't display mana because they don't have any.
+        print("Orc Archer A: "+str(orca1[0])+" HP")
+    if "Orc Archer B" not in fainted:
+        print("Orc Archer B: "+str(orca2[0])+" HP")
+    
+    print("")
+
+    if "Warrior" not in fainted:
+        print("Warrior: "+str(warrior[0])+ " HP, "+ str(warrior[1])+" MP")
+    if "Priest" not in fainted:
+        print("Priest: "+str(priest[0])+" HP, "+str(priest[1])+" MP")
+    if "Rogue" not in fainted:
+        print("Rogue: "+str(rogue[0])+" HP, "+str(rogue[1])+" MP")
+    if "Paladin" not in fainted:
+        print("Paladin: "+str(paladin[0])+" HP, "+str(paladin[1])+" MP")
+
+    print("--------------------------------------")
 
 
 #-----------------------------------------------------------------------------------------------
@@ -497,10 +541,58 @@ def attackphase(characterID):
         print("Unknown Command.")  #Causes error if the battle command is unknown, and lopps back to the prompt.
         attackphase(characterID)
 
+    input("(Press Enter to continue...)") #Gives the player a moment to read the text before advancing.
+    print("--------------------------------------")
 
-        
-        
 
+
+def enemyPhase(charID):
+
+    if charID==5:
+        WP=orcw1[3]
+
+    elif charID==6:
+        WP=orcw2[3]
+
+    elif charID==7:
+        WP=orca1[3]
+
+    elif charID==8:
+        WP=orca2[3]
+
+    turn=True
+    
+    while turn:
+
+            enemyChooses(charID)  #The game randomly chooses an ally and their stats will be used for melee combat.
+
+            if target=="warrior" and "Warrior" not in fainted:  #Can only target Warrior if they're alive
+
+                updateValuesMelee("Warrior",warrior,WP)
+                turn=False
+
+            elif target=="priest" and "Priest" not in fainted:  #Can only target Priest if they're alive
+                
+                updateValuesMelee("Priest",priest,WP)
+                turn=False
+
+            elif target=="rogue" and "Rogue" not in fainted:  #Can only target Rogue if they're alive
+                
+                updateValuesMelee("Rogue",rogue,WP)
+                turn=False
+            
+            elif target=="paladin" and "Paladin" not in fainted:  #Can only target Paladin if they're alive
+                
+                updateValuesMelee("Paladin",paladin,WP)
+                turn=False
+
+            else:
+                print(str(target)+" unknown.")  #Prints a debug message if the target is unknown.
+                print("--------------------------------------")
+                turn=False
+
+    input("(Press Enter to continue...)") #Gives the player a moment to read the text before advancing.
+    print("--------------------------------------")
     
   
 
@@ -515,6 +607,7 @@ while game:
     print("--------------------------------------")
 
     initphase()
+    displayStatus()
 
     while len(order)>0:  #Loops until all characters have ended their attack phase.
 
@@ -523,6 +616,7 @@ while game:
                 print("It's Warrior's turn.")
                 print("")
                 attackphase(1)
+                displayStatus()
             order.remove(order[-1])
 
         
@@ -531,6 +625,7 @@ while game:
                 print("It's Priest's turn.")
                 print("")
                 attackphase(2)
+                displayStatus()
             order.remove(order[-1])
                 
         
@@ -539,6 +634,7 @@ while game:
                 print("It's Rogue's turn.")
                 print("")
                 attackphase(3)
+                displayStatus()
             order.remove(order[-1])
 
         
@@ -547,6 +643,7 @@ while game:
                 print("It's Paladin's turn.")
                 print("")
                 attackphase(4)
+                displayStatus()
             order.remove(order[-1])
 
 
@@ -554,6 +651,8 @@ while game:
             if "Orc Warrior A" not in fainted and len(allies)!=0:
                 print("It's Orc Warrior A's turn.")
                 print("")
+                enemyPhase(5)
+                displayStatus()
             order.remove(order[-1])
                 
 
@@ -561,6 +660,8 @@ while game:
             if "Orc Warrior B" not in fainted and len(allies)!=0:
                 print("It's Orc Warrior B's turn.")
                 print("")
+                enemyPhase(6)
+                displayStatus()
             order.remove(order[-1])
 
 
@@ -568,6 +669,8 @@ while game:
             if "Orc Archer A" not in fainted and len(allies)!=0:
                 print("It's Orc Archer A's turn.")
                 print("")
+                enemyPhase(7)
+                displayStatus()
             order.remove(order[-1])
 
 
@@ -575,6 +678,8 @@ while game:
             if "Orc Archer B" not in fainted and len(allies)!=0:
                 print("It's Orc Archer B's turn.")
                 print("")
+                enemyPhase(8)
+                displayStatus()
             order.remove(order[-1])
 
 
