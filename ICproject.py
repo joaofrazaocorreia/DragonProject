@@ -43,7 +43,7 @@ def rolld4():
 warrior=[32,5, 2,5,2] #HP, MP, AP, WP, INIT     ID=1
 priest= [20,25,0,2,6]                         # ID=2
 rogue = [23,10,1,4,4]                         # ID=3
-paladin=[45,15,1,3,1]                         # ID=4
+paladin=[35,15,1,3,1]                         # ID=4
 
 
 #-----------------------------------------------------------------------------------------------
@@ -136,7 +136,7 @@ def calculateValues(spell, WP):  #CALCULATE VALUES - Depending on the spell give
         spellEffectValue= -2 * rolld4()
 
     elif spell=="judgement":
-        spellEffectValue= -1 * (WP+rolld6())
+        spellEffectValue= -1 * (WP+rolld8())
 
     return spellEffectValue
 
