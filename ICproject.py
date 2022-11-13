@@ -275,7 +275,7 @@ def castSpell(spellname,charID,stats): #CAST SPELL - calls updateValuesMagic and
                     print("--------------------------------------")
 
 
-def displayStatus(): #DISPLAY STATUS - This command displays the current status of the battle, such as stats and which characters are alive.
+def displayStatus(): #DISPLAY STATUS - This command displays the current status of the battle for each character alive.
 
     print(str(len(wave1))+" enemies remain!")
     print("")
@@ -289,7 +289,7 @@ def displayStatus(): #DISPLAY STATUS - This command displays the current status 
     if "Orc Archer B" not in fainted:
         print("Orc Archer B: "+str(orca2[0])+" HP")
     
-    print("")
+    print("")  # Stats only display if the character is not fainted.
 
     if "Warrior" not in fainted:
         print("Warrior: "+str(warrior[0])+ " HP, "+ str(warrior[1])+" MP")
@@ -397,7 +397,7 @@ def initphase():
     if "Orc Archer B" not in fainted: 
         order.append(orcarcherBInit)
 
-    while rogueInit in order:          #IMPORTANT NOTE - DON'T CHANGE THIS ORDER!!!! THEY'RE BASED ON INIT VALUES, FROM LOWEST TO HIGHEST
+    while rogueInit in order:   # This order is based on priority. If a tie happens between two characters with the same init, the character who's below will go first.
         rogueInit+=0.1
     if "Rogue" not in fainted:
         order.append(rogueInit)
@@ -543,7 +543,11 @@ def attackphase(characterID):
 
     input("(Press Enter to continue...)") #Gives the player a moment to read the text before advancing.
     print("--------------------------------------")
+    displayStatus() # Displays the health and mana of all characters currently alive.
 
+
+#-----------------------------------------------------------------------------------------------
+#ENEMY PHASE - Command for the enemies' attack phase
 
 
 def enemyPhase(charID):
@@ -552,7 +556,7 @@ def enemyPhase(charID):
         WP=orcw1[3]
 
     elif charID==6:
-        WP=orcw2[3]
+        WP=orcw2[3]  # Assigns WP based on the character ID given.
 
     elif charID==7:
         WP=orca1[3]
@@ -560,7 +564,7 @@ def enemyPhase(charID):
     elif charID==8:
         WP=orca2[3]
 
-    turn=True
+    turn=True  #Variable for looping until the turn successfully ends.
     
     while turn:
 
@@ -593,6 +597,7 @@ def enemyPhase(charID):
 
     input("(Press Enter to continue...)") #Gives the player a moment to read the text before advancing.
     print("--------------------------------------")
+    displayStatus() # Displays the health and mana of all characters currently alive.
     
   
 
@@ -616,7 +621,6 @@ while game:
                 print("It's Warrior's turn.")
                 print("")
                 attackphase(1)
-                displayStatus()
             order.remove(order[-1])
 
         
@@ -625,7 +629,6 @@ while game:
                 print("It's Priest's turn.")
                 print("")
                 attackphase(2)
-                displayStatus()
             order.remove(order[-1])
                 
         
@@ -634,7 +637,6 @@ while game:
                 print("It's Rogue's turn.")
                 print("")
                 attackphase(3)
-                displayStatus()
             order.remove(order[-1])
 
         
@@ -643,7 +645,6 @@ while game:
                 print("It's Paladin's turn.")
                 print("")
                 attackphase(4)
-                displayStatus()
             order.remove(order[-1])
 
 
@@ -652,7 +653,6 @@ while game:
                 print("It's Orc Warrior A's turn.")
                 print("")
                 enemyPhase(5)
-                displayStatus()
             order.remove(order[-1])
                 
 
@@ -661,7 +661,6 @@ while game:
                 print("It's Orc Warrior B's turn.")
                 print("")
                 enemyPhase(6)
-                displayStatus()
             order.remove(order[-1])
 
 
@@ -670,7 +669,6 @@ while game:
                 print("It's Orc Archer A's turn.")
                 print("")
                 enemyPhase(7)
-                displayStatus()
             order.remove(order[-1])
 
 
@@ -679,7 +677,6 @@ while game:
                 print("It's Orc Archer B's turn.")
                 print("")
                 enemyPhase(8)
-                displayStatus()
             order.remove(order[-1])
 
 
